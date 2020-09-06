@@ -17,8 +17,8 @@ import { FacebookAuthModule } from './facebook-auth/facebook-auth.module';
       }
     }]),
     ConfigModule.forRoot(),
-    LocalAuthModule,
     DbModule,
+    LocalAuthModule,
     GoogleAuthModule,
     FacebookAuthModule,
   ],

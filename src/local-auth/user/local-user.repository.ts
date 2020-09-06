@@ -1,9 +1,9 @@
-import { LocalUserEntity } from "./local-user.entity";
-import { EntityRepository, Repository } from "typeorm";
-import { AuthCredentialsDto } from "../dto/auth-credentials.dto";
-import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
+import { EntityRepository, Repository } from "typeorm";
+import * as bcrypt from 'bcrypt';
+import { LocalUserEntity } from "./local-user.entity";
+import { AuthCredentialsDto } from "../dto/auth-credentials.dto";
 
 @EntityRepository(LocalUserEntity)
 export class LocalUserRepository extends Repository<LocalUserEntity> {

@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm';
-import { LocalUserRepository } from './user/local-user.repository';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { JwtPayload } from './jwt/jwt-payload.interface';
 import { RpcException } from '@nestjs/microservices';
+import { LocalUserRepository } from './user/local-user.repository';
+import { JwtPayload } from './jwt/jwt-payload.interface';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { JwtAuthDto } from './dto/jwt-auth.dto';
 
 @Injectable()
 export class LocalAuthService {
@@ -43,7 +44,14 @@ export class LocalAuthService {
         return user.id;
     }
 
-    validateToken(jwt: string) {
-        return this.jwtService.verify(jwt);
+    validateToken(jwtDataObject: JwtAuthDto) {
+        const { jwt } = jwtDataObject;
+        try {
+            const res = this.jwtService.verify(jwt);
+      
+            return res;
+        } catch(e) {
+            return false;
+        }
     }
 }
