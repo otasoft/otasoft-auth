@@ -1,17 +1,17 @@
-import { UserEntity } from "./user.entity";
+import { LocalUserEntity } from "./local-user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { AuthCredentialsDto } from "../dto/auth-credentials.dto";
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
 
-@EntityRepository(UserEntity)
-export class UserRepository extends Repository<UserEntity> {
+@EntityRepository(LocalUserEntity)
+export class LocalUserRepository extends Repository<LocalUserEntity> {
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
         const { username, password } = authCredentialsDto;
 
         const salt = await bcrypt.genSalt();
-        const user = new UserEntity();
+        const user = new LocalUserEntity();
         user.username = username;
         user.password = await this.hashPassword(password, salt);
 
