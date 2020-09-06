@@ -2,7 +2,8 @@ import { UserEntity } from "./user.entity";
 import { EntityRepository, Repository } from "typeorm";
 import { AuthCredentialsDto } from "../dto/auth-credentials.dto";
 import * as bcrypt from 'bcrypt';
-import { ConflictException, InternalServerErrorException } from "@nestjs/common";
+import { InternalServerErrorException } from "@nestjs/common";
+import { RpcException } from "@nestjs/microservices";
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
@@ -17,8 +18,9 @@ export class UserRepository extends Repository<UserEntity> {
         try {
             await user.save();
         } catch(error) {
-            if(error.code === '23505') {
-                throw new ConflictException('Username already exists');
+            const conflictExceptionCode = '23505';
+            if(error.code === conflictExceptionCode) {
+                throw new RpcException('Username already exists');
             } else {
                 throw new InternalServerErrorException();
             }

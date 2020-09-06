@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user/user.repository';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtPayload } from './jwt/jwt-payload.interface';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -28,5 +29,21 @@ export class AuthService {
         const accessToken: string = await this.jwtService.sign(payload)
 
         return { accessToken }
+    }
+
+    async getUserId(authCredentialsDto: AuthCredentialsDto): Promise<number> {
+        const { username } = authCredentialsDto;
+
+        const user = await this.userRepository.findOne({ username })
+
+        if (!user) {
+            throw new RpcException('User does not exist')
+        }
+
+        return user.id;
+    }
+
+    validateToken(jwt: string) {
+        return this.jwtService.verify(jwt);
     }
 }
