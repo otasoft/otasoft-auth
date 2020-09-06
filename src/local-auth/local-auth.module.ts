@@ -3,11 +3,11 @@ import { PassportModule } from '@nestjs/passport'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { LocalAuthController } from './local-auth.controller';
+import { LocalAuthService } from './local-auth.service';
 import { JwtStrategy } from './jwt/jwt-strategy';
-import { UserRepository } from './user/user.repository';
-import { UserEntity } from './user/user.entity';
+import { LocalUserRepository } from './user/local-user.repository';
+import { LocalUserEntity } from './user/local-user.entity';
 
 @Module({
   imports: [
@@ -22,11 +22,11 @@ import { UserEntity } from './user/user.entity';
         }
       })
     }),
-    TypeOrmModule.forFeature([UserRepository, UserEntity])
+    TypeOrmModule.forFeature([LocalUserRepository, LocalUserEntity])
   ],
-  controllers: [AuthController],
+  controllers: [LocalAuthController],
   providers: [
-    AuthService,
+    LocalAuthService,
     JwtStrategy,
     ConfigService
   ],
@@ -35,4 +35,4 @@ import { UserEntity } from './user/user.entity';
     PassportModule
   ]
 })
-export class AuthModule {}
+export class LocalAuthModule {}

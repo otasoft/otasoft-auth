@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AuthModule } from './auth/auth.module';
+import { LocalAuthModule } from './local-auth/local-auth.module';
 import { DbModule } from './db/db.module';
+import { GoogleAuthModule } from './google-auth/google-auth.module';
+import { FacebookAuthModule } from './facebook-auth/facebook-auth.module';
 
 @Module({
   imports: [
@@ -15,8 +17,10 @@ import { DbModule } from './db/db.module';
       }
     }]),
     ConfigModule.forRoot(),
-    AuthModule,
-    DbModule
+    DbModule,
+    LocalAuthModule,
+    GoogleAuthModule,
+    FacebookAuthModule,
   ],
 })
 export class AppModule {}
