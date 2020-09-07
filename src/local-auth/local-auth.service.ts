@@ -1,47 +1,29 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt'
-import { InjectRepository } from '@nestjs/typeorm';
-import { RpcException } from '@nestjs/microservices';
-import { LocalUserRepository } from './user/local-user.repository';
-import { JwtPayload } from './jwt/jwt-payload.interface';
+import { QueryBus, CommandBus } from '@nestjs/cqrs'
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
+import { GetUserIdQuery } from './queries/impl';
+import { SignUpCommand, SignInCommand } from './commands/impl';
 
 @Injectable()
 export class LocalAuthService {
     constructor(
-        @InjectRepository(LocalUserRepository)
-        private userRepository: LocalUserRepository,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly queryBus: QueryBus,
+        private readonly commandBus: CommandBus,
     ) {}
     
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-        return this.userRepository.signUp(authCredentialsDto);
+        return this.commandBus.execute(new SignUpCommand(authCredentialsDto));
     }
 
     async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
-        const username = await this.userRepository.validateUserPassword(authCredentialsDto);
-
-        if(!username) {
-            throw new UnauthorizedException('Invalid credentials');
-        }
-
-        const payload: JwtPayload = { username }
-        const accessToken: string = await this.jwtService.sign(payload)
-
-        return { accessToken }
+        return this.commandBus.execute(new SignInCommand(authCredentialsDto));
     }
 
     async getUserId(authCredentialsDto: AuthCredentialsDto): Promise<number> {
-        const { username } = authCredentialsDto;
-
-        const user = await this.userRepository.findOne({ username })
-
-        if (!user) {
-            throw new RpcException('User does not exist')
-        }
-
-        return user.id;
+        return this.queryBus.execute(new GetUserIdQuery(authCredentialsDto));
     }
 
     validateToken(jwtDataObject: JwtAuthDto) {
