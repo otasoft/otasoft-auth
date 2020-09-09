@@ -1,29 +1,29 @@
 version: '3.7'
 services:
-  db:
+  postgres:
     env_file: 
       - .env
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - ${POSTGRES_PORT}:5432
     volumes:
       - /data/postgres/
     networks:
-      - pg-network
+      - otasoft-auth-network
 
   pgadmin:
     links:
-      - db:db
+      - postgres:postgres
     env_file: 
       - .env
     image: dpage/pgadmin4
     ports:
-      - "6123:80"
+      - ${PGADMIN_HOST_PORT}:80
     depends_on:
-      - db
+      - postgres
     networks:
-      - pg-network
+      - otasoft-auth-network
 
 networks: 
-  pg-network:
+  otasoft-auth-network:
     driver: bridge
