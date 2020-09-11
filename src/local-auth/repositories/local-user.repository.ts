@@ -7,7 +7,7 @@ import { AuthCredentialsDto } from "../dto/auth-credentials.dto";
 
 @EntityRepository(LocalUserEntity)
 export class LocalUserRepository extends Repository<LocalUserEntity> {
-    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<number> {
         const { email, password } = authCredentialsDto;
 
         const salt = await bcrypt.genSalt();
@@ -17,6 +17,7 @@ export class LocalUserRepository extends Repository<LocalUserEntity> {
 
         try {
             await user.save();
+            return user.id;
         } catch(error) {
             const conflictExceptionCode = '23505';
             if(error.code === conflictExceptionCode) {

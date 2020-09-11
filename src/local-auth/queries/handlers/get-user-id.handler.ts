@@ -13,7 +13,7 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
         ) {}
 
     async execute(query: GetUserIdQuery) {
-        const { email } = query.signInCredentials
+        const { email } = query.authCredentials
         const user = await this.localUserRepository.findOne({ email })
 
         if (!user) {

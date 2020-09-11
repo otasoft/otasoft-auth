@@ -2,7 +2,7 @@ import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column } from "type
 import * as bcrypt from 'bcrypt';
 
 @Entity()
-@Unique(['username'])
+@Unique(['email'])
 export class LocalUserEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
