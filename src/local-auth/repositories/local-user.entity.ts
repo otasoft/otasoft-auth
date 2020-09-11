@@ -8,7 +8,7 @@ export class LocalUserEntity extends BaseEntity {
     id: number;
 
     @Column()
-    username: string;
+    email: string;
 
     @Column()
     password: string;

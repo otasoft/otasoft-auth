@@ -1,6 +1,6 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { GetUserIdQuery } from '../impl';
-import { LocalUserRepository } from 'src/local-auth/user/local-user.repository';
+import { LocalUserRepository } from 'src/local-auth/repositories/local-user.repository';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -13,8 +13,8 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
         ) {}
 
     async execute(query: GetUserIdQuery) {
-        const { username } = query.authCredentialsDto
-        const user = await this.localUserRepository.findOne({ username })
+        const { email } = query.signInCredentials
+        const user = await this.localUserRepository.findOne({ email })
 
         if (!user) {
             throw new RpcException('User does not exist')

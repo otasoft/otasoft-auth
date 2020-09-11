@@ -1,7 +1,7 @@
-import { AuthCredentialsDto } from "src/local-auth/dto/auth-credentials.dto";
+import { SignInCredentialsDto } from "src/local-auth/dto/sign-in-credentials.dto";
 
 export class GetUserIdQuery {
     constructor(
-        public readonly authCredentialsDto: AuthCredentialsDto,
+        public readonly signInCredentials: SignInCredentialsDto,
     ) {}
 }
