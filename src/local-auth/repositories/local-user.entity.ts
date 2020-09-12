@@ -17,4 +17,7 @@ export class LocalUserEntity extends BaseEntity {
         const result = await bcrypt.compare(password, this.password);
         return result;
     }
+
+    @Column()
+    is_confirmed: boolean;
 }

@@ -2,26 +2,33 @@ import { InternalServerErrorException } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
 import { EntityRepository, Repository } from "typeorm";
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 import { LocalUserEntity } from "./local-user.entity";
 import { AuthCredentialsDto } from "../dto/auth-credentials.dto";
+import { IAuthObject } from "../interfaces/auth-object.interface";
 
 @EntityRepository(LocalUserEntity)
 export class LocalUserRepository extends Repository<LocalUserEntity> {
-    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<number> {
+    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<IAuthObject> {
         const { email, password } = authCredentialsDto;
 
         const salt = await bcrypt.genSalt();
         const user = new LocalUserEntity();
         user.email = email;
         user.password = await this.hashPassword(password, salt);
+        user.is_confirmed = false;
 
         try {
             await user.save();
-            return user.id;
+            const token = jwt.sign({ userId: user.id }, process.env.EMAIL_SECRET, { expiresIn: '2d' });
+            return {
+                auth_id: user.id,
+                token: token
+            };
         } catch(error) {
             const conflictExceptionCode = '23505';
             if(error.code === conflictExceptionCode) {
-                throw new RpcException('Username already exists');
+                throw new RpcException('Email already registered');
             } else {
                 throw new InternalServerErrorException();
             }
