@@ -1,8 +1,9 @@
-import { Controller, Body, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller, Body } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { LocalAuthService } from './local-auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
+import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
 
 @Controller('auth')
 export class LocalAuthController {
@@ -10,13 +11,16 @@ export class LocalAuthController {
         private readonly localAuthService: LocalAuthService
     ) {}
 
-    @UsePipes(new ValidationPipe)
     @MessagePattern({ role: 'local-auth', cmd: 'register' })
     async signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
         return this.localAuthService.signUp(authCredentialsDto)
     }
 
-    @UsePipes(new ValidationPipe)
+    @MessagePattern({ role: 'local-auth', cmd: 'confirm' })
+    async confirmAccountCreation(@Body() authConfirmationDto: AuthConfirmationDto): Promise<void> {
+        return this.localAuthService.confirmAccountCreation(authConfirmationDto);
+    }
+
     @MessagePattern({ role: 'local-auth', cmd: 'login' })
     async signIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
         return this.localAuthService.signIn(authCredentialsDto)
