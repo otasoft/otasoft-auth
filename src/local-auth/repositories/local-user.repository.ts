@@ -20,7 +20,7 @@ export class LocalUserRepository extends Repository<LocalUserEntity> {
 
         try {
             await user.save();
-            const token = jwt.sign({ userId: user.id }, process.env.EMAIL_SECRET, { expiresIn: '2d' });
+            const token = jwt.sign({ userId: user.id, userEmail: user.email }, process.env.EMAIL_SECRET, { expiresIn: '2d' });
             return {
                 auth_id: user.id,
                 token: token

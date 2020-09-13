@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt'
 import { QueryBus, CommandBus } from '@nestjs/cqrs'
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
-import { GetUserIdQuery } from './queries/impl';
-import { SignUpCommand, SignInCommand } from './commands/impl';
+import { GetConfirmedUserQuery, GetUserIdQuery } from './queries/impl';
+import { SignUpCommand, SignInCommand, ConfirmAccountCreationCommand } from './commands/impl';
+import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
+import { IConfirmedAccountObject } from './interfaces/confirmed-acount-object.interface';
 
 @Injectable()
 export class LocalAuthService {
@@ -16,6 +18,13 @@ export class LocalAuthService {
     
     async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
         return this.commandBus.execute(new SignUpCommand(authCredentialsDto));
+    }
+
+    async confirmAccountCreation(authConfirmationDto: AuthConfirmationDto): Promise<void> {
+        const accountConfirmObject: IConfirmedAccountObject = await this.queryBus.execute(new GetConfirmedUserQuery(authConfirmationDto));
+        if (!accountConfirmObject) throw new BadRequestException();
+        
+        await this.commandBus.execute(new ConfirmAccountCreationCommand(accountConfirmObject))
     }
 
     async signIn(authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
