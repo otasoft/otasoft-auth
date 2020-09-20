@@ -6,6 +6,8 @@ COPY package.json ./
 
 RUN yarn install
 
+RUN apk --no-cache add --virtual builds-deps build-base python
+
 COPY . .
 
 RUN yarn run build
