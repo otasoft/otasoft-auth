@@ -6,7 +6,7 @@ COPY package.json ./
 
 RUN yarn install
 
-RUN apk --no-cache add --virtual builds-deps build-base python
+RUN apk --no-cache add --virtual builds-deps build-base python && npm rebuild bcrypt --build-from-source
 
 COPY . .
 
