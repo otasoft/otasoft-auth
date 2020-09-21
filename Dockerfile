@@ -1,17 +1,27 @@
-FROM node:12-alpine as build
+FROM node:12-alpine as dev
 
-WORKDIR /usr/share/otasoft-auth
+WORKDIR /usr/share/microservices/otasoft-auth
 
-ADD dist package.json ./
+COPY package.json ./
 
-RUN yarn install --production
+RUN yarn install
 
-FROM node:12-alpine
+RUN apk --no-cache add --virtual builds-deps build-base python && npm rebuild bcrypt --build-from-source
 
-WORKDIR /usr/share/otasoft-auth
+COPY . .
 
-COPY --from=build /usr/share/otasoft-auth .
+RUN yarn run build
 
-EXPOSE 60231
+# ADD dist package.json ./
 
-CMD ["node", "main.js"]
+# RUN yarn install --production
+
+# FROM node:12-alpine
+
+# WORKDIR /usr/share/microservices/otasoft-auth
+
+# COPY --from=build /usr/share/microservices/otasoft-auth/dist ./dist
+
+# EXPOSE 60231
+
+# CMD ["node", "dist/main"]
