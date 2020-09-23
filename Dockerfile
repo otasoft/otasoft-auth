@@ -2,7 +2,7 @@ FROM node:12-alpine as BUILD_IMAGE
 
 RUN apk update && apk add yarn curl bash make && rm -rf /var/cache/apk/* && apk --no-cache add --virtual builds-deps build-base python
 
-WORKDIR /usr/share/otasoft-auth
+WORKDIR /usr/share/microservices/otasoft-auth
 
 RUN curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
 
@@ -10,9 +10,9 @@ COPY package.json yarn.lock ./
 
 RUN yarn --frozen-lockfile
 
-WORKDIR /usr/share/otasoft-auth
+COPY . .
 
-COPY --from=build /usr/share/otasoft-auth .
+RUN yarn run build
 
 RUN npm prune --production
 
