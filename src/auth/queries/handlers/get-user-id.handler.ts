@@ -20,6 +20,6 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
             throw new RpcException('User does not exist')
         }
 
-        return user.id;
+        return { auth_id: user.id }
     }
 }

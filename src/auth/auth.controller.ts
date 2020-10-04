@@ -27,7 +27,7 @@ export class AuthController {
     }
 
     @MessagePattern({ role: 'auth', cmd: 'getId' })
-    async getUserId(@Body() authCredentialsDto: AuthCredentialsDto): Promise<number> {
+    async getUserId(@Body() authCredentialsDto: AuthCredentialsDto): Promise<{ auth_id: number }> {
         return this.authService.getUserId(authCredentialsDto);
     }
 

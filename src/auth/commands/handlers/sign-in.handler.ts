@@ -15,15 +15,15 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     ) {}
 
     async execute(command: SignInCommand) {
-        const email = await this.userRepository.validateUserPassword(command.authCredentials);
+        const user = await this.userRepository.findOne({ email: command.authCredentials.email });
 
-        if(!email) {
+        if(user && await user.validatePassword(command.authCredentials.password)) {
+            const payload: JwtPayload = { email: command.authCredentials.email }
+            const accessToken: string = await this.jwtService.sign(payload)
+    
+            return { accessToken }
+        } else {
             throw new UnauthorizedException('Invalid credentials');
         }
-
-        const payload: JwtPayload = { email }
-        const accessToken: string = await this.jwtService.sign(payload)
-
-        return { accessToken }
     }
 }

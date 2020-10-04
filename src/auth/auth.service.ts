@@ -31,7 +31,7 @@ export class AuthService {
         return this.commandBus.execute(new SignInCommand(authCredentialsDto));
     }
 
-    async getUserId(authCredentialsDto: AuthCredentialsDto): Promise<number> {
+    async getUserId(authCredentialsDto: AuthCredentialsDto): Promise<{ auth_id: number }> {
         return this.queryBus.execute(new GetUserIdQuery(authCredentialsDto));
     }
 
