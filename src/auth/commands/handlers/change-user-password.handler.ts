@@ -3,6 +3,7 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { RpcException } from "@nestjs/microservices";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserRepository } from "src/auth/repositories/user.repository";
+import { PasswordUtilsService } from "src/utils/password-utils.service";
 import { ChangeUserPasswordCommand } from "../impl";
 
 @CommandHandler(ChangeUserPasswordCommand)
@@ -10,6 +11,7 @@ export class ChangeUserPasswordHandler implements ICommandHandler<ChangeUserPass
     constructor(
         @InjectRepository(UserRepository)
         private readonly userRepository: UserRepository,
+        private readonly passwordUtilsService: PasswordUtilsService,
     ) {}
 
     async execute(command: ChangeUserPasswordCommand) {
@@ -17,7 +19,8 @@ export class ChangeUserPasswordHandler implements ICommandHandler<ChangeUserPass
 
         if (user && await user.validatePassword(command.changePasswordDto.changePasswordDto.old_password)) {
             try {
-                user.password = command.changePasswordDto.changePasswordDto.new_password;
+                const salt = await this.passwordUtilsService.generateSalt();
+                user.password = await this.passwordUtilsService.hashPassword(command.changePasswordDto.changePasswordDto.new_password, salt);
                 await this.userRepository.save(user);
                 return {
                     response: 'Password changed successfuly'

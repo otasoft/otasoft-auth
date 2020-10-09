@@ -12,6 +12,7 @@ import { UserEntity } from './repositories/user.entity';
 import { QueryHandlers } from './queries/handlers'
 import { CommandHandlers } from './commands/handlers';
 import { jwtModuleOptions } from './jwt/jwt-module-options';
+import { PasswordUtilsService } from 'src/utils/password-utils.service';
 
 @Module({
   imports: [
@@ -21,13 +22,14 @@ import { jwtModuleOptions } from './jwt/jwt-module-options';
       UserRepository,
       UserEntity
     ]),
-    CqrsModule
+    CqrsModule,
   ],
   controllers: [AuthController],
   providers: [
     AuthService,
     JwtStrategy,
     ConfigService,
+    PasswordUtilsService,
     ...QueryHandlers,
     ...CommandHandlers
   ],
