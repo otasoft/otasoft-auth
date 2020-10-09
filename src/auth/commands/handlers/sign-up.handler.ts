@@ -15,6 +15,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     ) {}
 
     async execute(command: SignUpCommand) {
+        // TODO Create a helper/common directory with methods used for password hashin (bcrypt operations)
         const salt = await bcrypt.genSalt();
         const user = await this.userRepository.create();
         user.email = command.authCredentials.email;
