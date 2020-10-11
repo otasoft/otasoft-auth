@@ -13,8 +13,8 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
         ) {}
 
     async execute(query: GetUserIdQuery) {
-        const { email } = query.authCredentials
-        const user = await this.userRepository.findOne({ email })
+        const email = query.authEmailDto
+        const user = await this.userRepository.findOne({ where: { email } })
 
         if (!user) {
             throw new RpcException('User does not exist')

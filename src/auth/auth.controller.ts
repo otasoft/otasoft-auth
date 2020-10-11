@@ -1,9 +1,11 @@
-import { Controller, Body } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import { AuthEmailDto } from './dto/auth-email.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,27 +14,51 @@ export class AuthController {
     ) {}
 
     @MessagePattern({ role: 'auth', cmd: 'register' })
-    async signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
+    async signUp(
+        authCredentialsDto: AuthCredentialsDto
+    ): Promise<void> {
         return this.authService.signUp(authCredentialsDto)
     }
 
     @MessagePattern({ role: 'auth', cmd: 'confirm' })
-    async confirmAccountCreation(@Body() authConfirmationDto: AuthConfirmationDto): Promise<void> {
+    async confirmAccountCreation(
+        authConfirmationDto: AuthConfirmationDto
+    ): Promise<void> {
         return this.authService.confirmAccountCreation(authConfirmationDto);
     }
 
     @MessagePattern({ role: 'auth', cmd: 'login' })
-    async signIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+    async signIn(
+        authCredentialsDto: AuthCredentialsDto
+    ): Promise<{ accessToken: string }> {
         return this.authService.signIn(authCredentialsDto)
     }
 
     @MessagePattern({ role: 'auth', cmd: 'getId' })
-    async getUserId(@Body() authCredentialsDto: AuthCredentialsDto): Promise<{ auth_id: number }> {
-        return this.authService.getUserId(authCredentialsDto);
+    async getUserId(
+        authEmailDto: AuthEmailDto
+    ): Promise<{ auth_id: number }> {
+        return this.authService.getUserId(authEmailDto);
     }
 
     @MessagePattern({ role: 'auth', cmd: 'checkJwt'})
-    async validateToken(jwtDataObject: JwtAuthDto) {
+    async validateToken(
+        jwtDataObject: JwtAuthDto
+    ) {
         return this.authService.validateToken(jwtDataObject);
+    }
+
+    @MessagePattern({ role: 'auth', cmd: 'changePassword' })
+    async changeUserPassword(
+        changePasswordDto: ChangePasswordDto
+    ): Promise<{ response: string }> {
+        return this.authService.changeUserPassword(changePasswordDto);
+    }
+
+    @MessagePattern({ role: 'auth', cmd: 'deleteAccount' })
+    async deleteUserAccount(
+        id: number
+    ): Promise<{ response: string }> {
+        return this.authService.deleteUserAccount(id);
     }
 }

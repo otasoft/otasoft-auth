@@ -6,19 +6,21 @@ import * as jwt from 'jsonwebtoken';
 import { UserRepository } from "src/auth/repositories/user.repository";
 import { RpcException } from "@nestjs/microservices";
 import { InternalServerErrorException } from "@nestjs/common";
+import { PasswordUtilsService } from "src/utils/password-utils.service";
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     constructor(
         @InjectRepository(UserRepository)
-        private readonly userRepository: UserRepository
+        private readonly userRepository: UserRepository,
+        private readonly passwordUtilsService: PasswordUtilsService,
     ) {}
 
     async execute(command: SignUpCommand) {
-        const salt = await bcrypt.genSalt();
+        const salt = await this.passwordUtilsService.generateSalt();
         const user = await this.userRepository.create();
         user.email = command.authCredentials.email;
-        user.password = await this.hashPassword(command.authCredentials.password, salt);
+        user.password = await this.passwordUtilsService.hashPassword(command.authCredentials.password, salt);
         user.is_confirmed = false;
 
         try {
@@ -36,9 +38,5 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
                 throw new InternalServerErrorException();
             }
         }
-    }
-
-    async hashPassword(password: string, salt: string): Promise<string> {
-        return bcrypt.hash(password, salt);
     }
 }
