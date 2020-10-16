@@ -9,6 +9,8 @@ import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
 import { IConfirmedAccountObject } from './interfaces/confirmed-acount-object.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { AuthEmailDto } from './dto/auth-email.dto';
+import { AccessControlDto } from './dto/access-control.dto';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -69,4 +71,25 @@ export class AuthService {
             return false;
         }
     }
+
+    async checkAccessControl(accessControlDto: AccessControlDto): Promise<boolean> {
+      const { jwt, id } = accessControlDto;
+  
+      const isTokenValidated = await this.validateToken({ jwt });
+  
+      const email: string = await this.jwtService.decode(jwt).toString();
+  
+      const emailDto: AuthEmailDto = {
+        email
+      }
+  
+      try {
+        const auth_id = await this.queryBus.execute(new GetUserIdQuery(emailDto))
+        return isTokenValidated && auth_id === id
+      } catch (error) {
+        throw new RpcException(error)
+      }
+  
+    }
 }
+

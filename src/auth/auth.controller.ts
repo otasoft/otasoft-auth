@@ -6,6 +6,7 @@ import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { AuthEmailDto } from './dto/auth-email.dto';
+import { AccessControlDto } from './dto/access-control.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -60,5 +61,12 @@ export class AuthController {
         id: number
     ): Promise<{ response: string }> {
         return this.authService.deleteUserAccount(id);
+    }
+
+    @MessagePattern({ role: 'auth', cmd: 'checkAccess' })
+    async checkAccessControl(
+      accessControlDto: AccessControlDto
+    ): Promise<boolean> {
+      return this.authService.checkAccessControl(accessControlDto);
     }
 }
