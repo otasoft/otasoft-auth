@@ -5,9 +5,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserRepository } from 'src/auth/repositories/user.repository';
+import { UserRepository } from '../../repositories/user.repository';
 import { SignUpCommand } from '../impl';
-import { PasswordUtilsService } from 'src/utils/password-utils.service';
+import { PasswordUtilsService } from '../../../utils/password-utils.service';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {

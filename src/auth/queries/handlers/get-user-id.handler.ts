@@ -3,7 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { GetUserIdQuery } from '../impl';
-import { UserRepository } from 'src/auth/repositories/user.repository';
+import { UserRepository } from '../../repositories/user.repository';
 
 @QueryHandler(GetUserIdQuery)
 export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
