@@ -1,7 +1,5 @@
-import { AuthEmailDto } from "src/auth/dto/auth-email.dto";
+import { GetUserIdDto } from 'src/auth/dto/get-user-id.dto';
 
 export class GetUserIdQuery {
-    constructor(
-        public readonly authEmailDto: AuthEmailDto,
-    ) {}
+  constructor(public readonly getUserIdDto: GetUserIdDto) {}
 }

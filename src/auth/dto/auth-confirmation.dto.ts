@@ -1,3 +1,3 @@
 export class AuthConfirmationDto {
-    token: string;
+  token: string;
 }
