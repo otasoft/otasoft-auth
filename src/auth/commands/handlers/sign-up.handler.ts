@@ -1,11 +1,12 @@
-import { SignUpCommand } from "../impl";
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
-import { InjectRepository } from "@nestjs/typeorm";
-import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
-import { UserRepository } from "src/auth/repositories/user.repository";
-import { RpcException } from "@nestjs/microservices";
 import { InternalServerErrorException } from "@nestjs/common";
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs'
+import { RpcException } from "@nestjs/microservices";
+import { InjectRepository } from "@nestjs/typeorm";
+import * as jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
+
+import { UserRepository } from "src/auth/repositories/user.repository";
+import { SignUpCommand } from "../impl";
 import { PasswordUtilsService } from "src/utils/password-utils.service";
 
 @CommandHandler(SignUpCommand)
@@ -22,6 +23,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
         user.email = command.authCredentials.email;
         user.password = await this.passwordUtilsService.hashPassword(command.authCredentials.password, salt);
         user.is_confirmed = false;
+        user.jwt_payload = uuidv4();
 
         try {
             await user.save();
