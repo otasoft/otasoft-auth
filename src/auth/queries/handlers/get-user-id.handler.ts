@@ -1,9 +1,9 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { GetUserIdQuery } from '../impl';
-import { UserRepository } from 'src/auth/repositories/user.repository';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { GetUserIdQuery } from '../impl';
+import { UserRepository } from 'src/auth/repositories/user.repository';
 
 @QueryHandler(GetUserIdQuery)
 export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
@@ -13,8 +13,7 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
         ) {}
 
     async execute(query: GetUserIdQuery) {
-        const email = query.authEmailDto
-        const user = await this.userRepository.findOne({ where: { email } })
+        const user = await this.userRepository.findOne({ where: { jwt_payload: query.getUserIdDto.payload }})
 
         if (!user) {
             throw new RpcException('User does not exist')
