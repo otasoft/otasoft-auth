@@ -1,28 +1,34 @@
-import { BaseEntity, Entity, Unique, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  BaseEntity,
+  Entity,
+  Unique,
+  PrimaryGeneratedColumn,
+  Column,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Exclude } from "class-transformer";
+import { Exclude } from 'class-transformer';
 
 @Entity()
 @Unique(['email'])
 export class UserEntity extends BaseEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    email: string;
+  @Column()
+  email: string;
 
-    @Column()
-    @Exclude()
-    password: string;
+  @Column()
+  @Exclude()
+  password: string;
 
-    @Column()
-    jwt_payload: string;
+  @Column()
+  jwt_payload: string;
 
-    @Column()
-    is_confirmed: boolean;
+  @Column()
+  is_confirmed: boolean;
 
-    async validatePassword(password: string): Promise<boolean> {
-        const result = await bcrypt.compare(password, this.password);
-        return result;
-    }
+  async validatePassword(password: string): Promise<boolean> {
+    const result = await bcrypt.compare(password, this.password);
+    return result;
+  }
 }

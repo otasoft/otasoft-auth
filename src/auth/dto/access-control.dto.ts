@@ -1,4 +1,4 @@
 export class AccessControlDto {
-    jwt: string;
-    id: number;
+  jwt: string;
+  id: number;
 }

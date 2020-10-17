@@ -1,4 +1,4 @@
 export interface IConfirmedAccountObject {
-    isAccountConfirmed: boolean;
-    userId: number;
+  isAccountConfirmed: boolean;
+  userId: number;
 }

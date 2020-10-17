@@ -6,19 +6,21 @@ import { GetUserIdQuery } from '../impl';
 import { UserRepository } from 'src/auth/repositories/user.repository';
 
 @QueryHandler(GetUserIdQuery)
-export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery>{
-    constructor(
-        @InjectRepository(UserRepository)
-        private readonly userRepository: UserRepository
-        ) {}
+export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
+  constructor(
+    @InjectRepository(UserRepository)
+    private readonly userRepository: UserRepository,
+  ) {}
 
-    async execute(query: GetUserIdQuery) {
-        const user = await this.userRepository.findOne({ where: { jwt_payload: query.getUserIdDto.payload }})
+  async execute(query: GetUserIdQuery) {
+    const user = await this.userRepository.findOne({
+      where: { jwt_payload: query.getUserIdDto.payload },
+    });
 
-        if (!user) {
-            throw new RpcException('User does not exist')
-        }
-
-        return { auth_id: user.id }
+    if (!user) {
+      throw new RpcException('User does not exist');
     }
+
+    return { auth_id: user.id };
+  }
 }

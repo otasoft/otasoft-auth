@@ -1,3 +1,3 @@
 export class JwtAuthDto {
-    jwt: string;
+  jwt: string;
 }

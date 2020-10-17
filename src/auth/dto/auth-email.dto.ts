@@ -1,3 +1,3 @@
 export class AuthEmailDto {
-    email: string
+  email: string;
 }
