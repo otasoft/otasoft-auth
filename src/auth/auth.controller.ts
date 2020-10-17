@@ -1,12 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { AuthEmailDto } from './dto/auth-email.dto';
 import { AccessControlDto } from './dto/access-control.dto';
+import { GetUserIdDto } from './dto/get-user-id.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -37,15 +38,15 @@ export class AuthController {
 
     @MessagePattern({ role: 'auth', cmd: 'getId' })
     async getUserId(
-        authEmailDto: AuthEmailDto
+        getUserIdDto: GetUserIdDto
     ): Promise<{ auth_id: number }> {
-        return this.authService.getUserId(authEmailDto);
+        return this.authService.getUserId(getUserIdDto);
     }
 
     @MessagePattern({ role: 'auth', cmd: 'checkJwt'})
-    async validateToken(
+    validateToken(
         jwtDataObject: JwtAuthDto
-    ) {
+    ): boolean {
         return this.authService.validateToken(jwtDataObject);
     }
 

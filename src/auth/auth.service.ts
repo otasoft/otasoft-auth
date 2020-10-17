@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt'
+import { RpcException } from '@nestjs/microservices';
 import { QueryBus, CommandBus } from '@nestjs/cqrs'
+
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtAuthDto } from './dto/jwt-auth.dto';
 import { GetConfirmedUserQuery, GetUserIdQuery } from './queries/impl';
@@ -8,9 +10,9 @@ import { SignUpCommand, SignInCommand, ConfirmAccountCreationCommand, ChangeUser
 import { AuthConfirmationDto } from './dto/auth-confirmation.dto';
 import { IConfirmedAccountObject } from './interfaces/confirmed-acount-object.interface';
 import { ChangePasswordDto } from './dto/change-password.dto';
-import { AuthEmailDto } from './dto/auth-email.dto';
 import { AccessControlDto } from './dto/access-control.dto';
-import { RpcException } from '@nestjs/microservices';
+import { GetUserIdDto } from './dto/get-user-id.dto';
+import { IJwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -42,9 +44,9 @@ export class AuthService {
     }
 
     async getUserId(
-        authEmailDto: AuthEmailDto
+        getUserIdDto: GetUserIdDto
     ): Promise<{ auth_id: number }> {
-        return this.queryBus.execute(new GetUserIdQuery(authEmailDto));
+        return this.queryBus.execute(new GetUserIdQuery(getUserIdDto));
     }
 
     async changeUserPassword(
@@ -73,23 +75,19 @@ export class AuthService {
     }
 
     async checkAccessControl(accessControlDto: AccessControlDto): Promise<boolean> {
-      const { jwt, id } = accessControlDto;
-  
-      const isTokenValidated = await this.validateToken({ jwt });
-  
-      const email: string = await this.jwtService.decode(jwt).toString();
-  
-      const emailDto: AuthEmailDto = {
-        email
-      }
-  
-      try {
-        const auth_id = await this.queryBus.execute(new GetUserIdQuery(emailDto))
-        return isTokenValidated && auth_id === id
-      } catch (error) {
-        throw new RpcException(error)
-      }
-  
+        const { jwt, id } = accessControlDto;
+    
+        const jwtTokenPayload: IJwtPayload = await this.validateToken({ jwt });
+
+        const isTokenValidated = Boolean(jwtTokenPayload);
+
+        if (!jwtTokenPayload.exp && !isTokenValidated) throw new RpcException({ statusCode: 401, errorStatus: 'Token has expired, please sign in' })
+    
+        const authObject = await this.queryBus.execute(new GetUserIdQuery({ payload: jwtTokenPayload.jwt_payload }))
+
+        if (authObject.auth_id !== id) throw new RpcException({ statusCode: 403, errorStatus: 'Forbidden resource' })
+        
+        return isTokenValidated && authObject.auth_id === id
     }
 }
 
