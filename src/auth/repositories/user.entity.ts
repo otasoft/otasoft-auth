@@ -16,6 +16,9 @@ export class UserEntity extends BaseEntity {
     password: string;
 
     @Column()
+    jwt_payload: string;
+
+    @Column()
     is_confirmed: boolean;
 
     async validatePassword(password: string): Promise<boolean> {
