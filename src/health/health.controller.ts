@@ -4,11 +4,11 @@ import { HealthService } from './health.service';
 
 @Controller('health')
 export class HealthController {
-    constructor(private readonly healthService: HealthService) {}
+  constructor(private readonly healthService: HealthService) {}
 
-    @Get('/check-auth-typeorm')
-    @HealthCheck()
-    checkAuthTypeorm() {
-        return this.healthService.checkAuthTypeorm();
-    }
+  @Get('/check-auth-typeorm')
+  @HealthCheck()
+  checkAuthTypeorm() {
+    return this.healthService.checkAuthTypeorm();
+  }
 }

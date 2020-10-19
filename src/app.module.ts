@@ -9,12 +9,13 @@ import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), 
+    ConfigModule.forRoot(),
     TerminusModule,
     ScheduleModule.forRoot(),
-    DbModule, 
-    AuthModule, 
-    UtilsModule, 
-    HealthModule],
+    DbModule,
+    AuthModule,
+    UtilsModule,
+    HealthModule,
+  ],
 })
 export class AppModule {}

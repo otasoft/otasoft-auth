@@ -6,17 +6,17 @@ import { AccessService } from 'src/auth/services/access/access.service';
 
 @Controller('access')
 export class AccessController {
-    constructor(private readonly accessService: AccessService) {}
+  constructor(private readonly accessService: AccessService) {}
 
-    @MessagePattern({ role: 'auth', cmd: 'checkJwt' })
-    validateToken(jwtDataObject: JwtAuthDto): boolean {
-      return this.accessService.validateToken(jwtDataObject);
-    }
+  @MessagePattern({ role: 'auth', cmd: 'checkJwt' })
+  validateToken(jwtDataObject: JwtAuthDto): boolean {
+    return this.accessService.validateToken(jwtDataObject);
+  }
 
-    @MessagePattern({ role: 'auth', cmd: 'checkAccess' })
-    async checkAccessControl(
-      accessControlDto: AccessControlDto,
-    ): Promise<boolean> {
-      return this.accessService.checkAccessControl(accessControlDto);
-    }
+  @MessagePattern({ role: 'auth', cmd: 'checkAccess' })
+  async checkAccessControl(
+    accessControlDto: AccessControlDto,
+  ): Promise<boolean> {
+    return this.accessService.checkAccessControl(accessControlDto);
+  }
 }

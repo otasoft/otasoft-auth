@@ -6,9 +6,7 @@ import { SignUpCommand, SignInCommand } from '../../commands/impl';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly commandBus: CommandBus,
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.commandBus.execute(new SignUpCommand(authCredentialsDto));
@@ -22,7 +20,7 @@ export class AuthService {
 
   async logout(): Promise<{ response: string }> {
     return new Promise((resolve, reject) => {
-      resolve({ response: 'Successfuly logged out' })
-    })
+      resolve({ response: 'Successfuly logged out' });
+    });
   }
 }
