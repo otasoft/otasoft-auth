@@ -1,7 +1,7 @@
-import { ConfirmAccountCreationCommand } from '../impl';
+import { ConfirmAccountCreationCommand } from '../../impl';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '../../repositories/user.repository';
+import { UserRepository } from '../../../repositories/user.repository';
 
 @CommandHandler(ConfirmAccountCreationCommand)
 export class ConfirmAccountCreationCommandHandler

@@ -4,9 +4,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SignInCommand } from '../impl';
-import { UserRepository } from '../../repositories/user.repository';
-import { IJwtPayload } from '../../interfaces/jwt-payload.interface';
+import { SignInCommand } from '../../impl';
+import { UserRepository } from '../../../repositories/user.repository';
+import { IJwtPayload } from '../../../interfaces/jwt-payload.interface';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
