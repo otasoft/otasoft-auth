@@ -5,7 +5,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { Exclude } from 'class-transformer';
 
 @Entity()
@@ -26,9 +25,4 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   is_confirmed: boolean;
-
-  async validatePassword(password: string): Promise<boolean> {
-    const result = await bcrypt.compare(password, this.password);
-    return result;
-  }
 }

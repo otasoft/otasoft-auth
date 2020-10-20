@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { SignInCommand } from '../../impl';
 import { UserRepository } from '../../../repositories/user.repository';
 import { IJwtPayload } from '../../../interfaces/jwt-payload.interface';
+import { ConfigService } from '@nestjs/config';
+import { PasswordUtilsService } from 'src/utils/password-utils.service';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
@@ -14,6 +16,8 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly passwordUtilsService: PasswordUtilsService,
+    private readonly configService: ConfigService,
   ) {}
 
   async execute(command: SignInCommand) {
@@ -27,7 +31,12 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
         errorStatus: 'User not found',
       });
 
-    if (await user.validatePassword(command.authCredentials.password)) {
+    if (
+      await this.passwordUtilsService.validatePassword(
+        command.authCredentials.password,
+        user.password,
+      )
+    ) {
       try {
         const jwtPayload = uuidv4();
         user.jwt_payload = jwtPayload;

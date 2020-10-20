@@ -27,8 +27,9 @@ export class ChangeUserPasswordHandler
       });
 
     if (
-      await user.validatePassword(
+      await this.passwordUtilsService.validatePassword(
         command.changePasswordDto.changePasswordDto.old_password,
+        user.password,
       )
     ) {
       try {
