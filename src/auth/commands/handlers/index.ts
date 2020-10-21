@@ -1,8 +1,8 @@
-import { SignInHandler } from './sign-in.handler';
-import { SignUpHandler } from './sign-up.handler';
-import { ConfirmAccountCreationCommandHandler } from './confirm-account-creation.handler';
-import { ChangeUserPasswordHandler } from './change-user-password.handler';
-import { DeleteUserAccountHandler } from './delete-user-account.handler';
+import { SignInHandler } from './auth/sign-in.handler';
+import { SignUpHandler } from './auth/sign-up.handler';
+import { ConfirmAccountCreationCommandHandler } from './user/confirm-account-creation.handler';
+import { ChangeUserPasswordHandler } from './user/change-user-password.handler';
+import { DeleteUserAccountHandler } from './user/delete-user-account.handler';
 
 export const CommandHandlers = [
   SignInHandler,

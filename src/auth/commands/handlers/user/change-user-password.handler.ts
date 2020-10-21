@@ -2,9 +2,9 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { UserRepository } from '../../repositories/user.repository';
-import { PasswordUtilsService } from '../../../utils/password-utils.service';
-import { ChangeUserPasswordCommand } from '../impl';
+import { UserRepository } from '../../../repositories/user.repository';
+import { PasswordUtilsService } from '../../../../utils/password-utils.service';
+import { ChangeUserPasswordCommand } from '../../impl';
 
 @CommandHandler(ChangeUserPasswordCommand)
 export class ChangeUserPasswordHandler
@@ -27,8 +27,9 @@ export class ChangeUserPasswordHandler
       });
 
     if (
-      await user.validatePassword(
+      await this.passwordUtilsService.validatePassword(
         command.changePasswordDto.changePasswordDto.old_password,
+        user.password,
       )
     ) {
       try {
