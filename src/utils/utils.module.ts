@@ -7,7 +7,11 @@ import { PasswordUtilsService } from './password-utils';
 
 @Module({
   imports: [ConfigModule],
-  providers: [PasswordUtilsService, RpcExceptionService, ErrorValidationService],
+  providers: [
+    PasswordUtilsService,
+    RpcExceptionService,
+    ErrorValidationService,
+  ],
   exports: [PasswordUtilsService, RpcExceptionService, ErrorValidationService],
 })
 export class UtilsModule {}

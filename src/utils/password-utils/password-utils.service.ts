@@ -7,17 +7,14 @@ export class PasswordUtilsService {
   constructor(private readonly configService: ConfigService) {}
   /**
    * Method that hashes the password with salt provided as parameter.
-   * Uses `bcrypt.hash()` method with password and salt as parameters. 
+   * Uses `bcrypt.hash()` method with password and salt as parameters.
    * Also, adds `HASH_PEPPER` environment variable to password.
    * @param {string} [password]
    * @param {string} [salt]
    * @return {*}  {String}
    * @memberof PasswordUtilsService
    */
-  async hashPassword(
-    password: string,
-    salt: string
-  ): Promise<string> {
+  async hashPassword(password: string, salt: string): Promise<string> {
     return await bcrypt.hash(
       password + this.configService.get<string>('HASH_PEPPER'),
       salt,
