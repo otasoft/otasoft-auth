@@ -11,19 +11,6 @@ services:
     networks:
       - otasoft-auth-network
 
-  pgadmin:
-    links:
-      - postgres:postgres
-    env_file: 
-      - .env
-    image: dpage/pgadmin4
-    ports:
-      - ${PGADMIN_HOST_PORT}:80
-    depends_on:
-      - postgres
-    networks:
-      - otasoft-auth-network
-
 networks: 
   otasoft-auth-network:
     driver: bridge
