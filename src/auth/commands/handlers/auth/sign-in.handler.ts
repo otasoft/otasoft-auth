@@ -8,7 +8,7 @@ import { SignInCommand } from '../../impl';
 import { UserRepository } from '../../../repositories/user.repository';
 import { IJwtPayload } from '../../../interfaces/jwt-payload.interface';
 import { ConfigService } from '@nestjs/config';
-import { PasswordUtilsService } from 'src/utils/password-utils.service';
+import { PasswordUtilsService } from 'src/utils/password-utils';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {

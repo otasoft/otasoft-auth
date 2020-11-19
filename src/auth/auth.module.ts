@@ -13,7 +13,7 @@ import { UserEntity } from './repositories/user.entity';
 import { QueryHandlers } from './queries/handlers';
 import { CommandHandlers } from './commands/handlers';
 import { jwtModuleOptions } from './jwt/jwt-module-options';
-import { PasswordUtilsService } from '../utils/password-utils.service';
+import { PasswordUtilsService } from '../utils/password-utils';
 import { AccessController } from './controllers/access/access.controller';
 import { AccessService } from './services/access/access.service';
 import { UserController } from './controllers/user/user.controller';
