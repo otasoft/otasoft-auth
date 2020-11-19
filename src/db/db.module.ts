@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { UserEntity } from './entities';
+
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -15,7 +17,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
         synchronize: true,
-        autoLoadEntities: true,
+        entities: [UserEntity],
       }),
     }),
   ],

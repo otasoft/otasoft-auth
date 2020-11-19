@@ -9,7 +9,6 @@ import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
 import { JwtStrategy } from './jwt/jwt-strategy';
 import { UserRepository } from './repositories/user.repository';
-import { UserEntity } from './repositories/user.entity';
 import { QueryHandlers } from './queries/handlers';
 import { CommandHandlers } from './commands/handlers';
 import { jwtModuleOptions } from './jwt/jwt-module-options';
@@ -23,7 +22,7 @@ import { UserService } from './services/user/user.service';
   imports: [
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync(jwtModuleOptions),
-    TypeOrmModule.forFeature([UserRepository, UserEntity]),
+    TypeOrmModule.forFeature([UserRepository]),
     CqrsModule,
   ],
   controllers: [AuthController, AccessController, UserController],
