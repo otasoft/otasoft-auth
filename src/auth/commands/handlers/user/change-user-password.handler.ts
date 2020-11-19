@@ -3,7 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserRepository } from '../../../repositories/user.repository';
-import { PasswordUtilsService } from '../../../../utils/password-utils.service';
+import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { ChangeUserPasswordCommand } from '../../impl';
 
 @CommandHandler(ChangeUserPasswordCommand)

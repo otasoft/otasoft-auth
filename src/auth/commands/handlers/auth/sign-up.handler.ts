@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { UserRepository } from '../../../repositories/user.repository';
 import { SignUpCommand } from '../../impl';
-import { PasswordUtilsService } from '../../../../utils/password-utils.service';
+import { PasswordUtilsService } from '../../../../utils/password-utils';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
