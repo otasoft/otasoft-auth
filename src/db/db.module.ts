@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { UserEntity } from './entities';
+import { UserSubscriber } from './subscribers';
 
 @Module({
   imports: [
@@ -21,5 +22,6 @@ import { UserEntity } from './entities';
       }),
     }),
   ],
+  providers: [UserSubscriber],
 })
 export class DbModule {}
