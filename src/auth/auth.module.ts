@@ -13,8 +13,6 @@ import { QueryHandlers } from './queries/handlers';
 import { CommandHandlers } from './commands/handlers';
 import { jwtModuleOptions } from './jwt/jwt-module-options';
 import { PasswordUtilsService } from '../utils/password-utils';
-import { AccessController } from './controllers/access/access.controller';
-import { AccessService } from './services/access/access.service';
 import { UserController } from './controllers/user/user.controller';
 import { UserService } from './services/user/user.service';
 
@@ -25,7 +23,7 @@ import { UserService } from './services/user/user.service';
     TypeOrmModule.forFeature([UserRepository]),
     CqrsModule,
   ],
-  controllers: [AuthController, AccessController, UserController],
+  controllers: [AuthController, UserController],
   providers: [
     AuthService,
     JwtStrategy,
@@ -33,7 +31,6 @@ import { UserService } from './services/user/user.service';
     PasswordUtilsService,
     ...QueryHandlers,
     ...CommandHandlers,
-    AccessService,
     UserService,
   ],
   exports: [JwtStrategy, PassportModule],
