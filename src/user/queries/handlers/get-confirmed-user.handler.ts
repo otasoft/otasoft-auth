@@ -3,7 +3,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
 
-import { IConfirmedAccountObject } from 'src/auth/interfaces/confirmed-acount-object.interface';
+import { IConfirmedAccountObject } from '../../interfaces';
 import { UserRepository } from '../../../db/repositories';
 import { GetConfirmedUserQuery } from '../impl';
 

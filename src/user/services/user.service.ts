@@ -7,7 +7,7 @@ import {
   DeleteUserAccountCommand,
 } from '../commands/impl';
 import { AuthConfirmationDto, ChangePasswordDto, GetUserIdDto } from '../dto';
-import { IConfirmedAccountObject } from 'src/auth/interfaces/confirmed-acount-object.interface';
+import { IConfirmedAccountObject } from '../interfaces';
 import { GetConfirmedUserQuery, GetUserIdQuery } from '../queries/impl';
 
 @Injectable()
