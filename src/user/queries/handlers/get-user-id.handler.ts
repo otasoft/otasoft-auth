@@ -1,15 +1,16 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { GetUserIdQuery } from '../impl';
 import { UserRepository } from '../../../db/repositories';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 
 @QueryHandler(GetUserIdQuery)
 export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(query: GetUserIdQuery) {
@@ -17,9 +18,7 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
       where: { jwt_payload: query.getUserIdDto.payload },
     });
 
-    if (!user) {
-      throw new RpcException('User does not exist');
-    }
+    if (!user) this.rpcExceptionService.throwNotFound('User does not exist')
 
     return { auth_id: user.id };
   }

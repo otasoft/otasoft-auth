@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
-import { RpcException } from '@nestjs/microservices';
 
 import { AccessControlDto, JwtAuthDto } from '../dto';
 import { IJwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 import { GetUserIdQuery } from 'src/user/queries/impl';
+import { RpcExceptionService } from '../../utils/exception-handling';
 
 @Injectable()
 export class AccessService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly queryBus: QueryBus,
+    private readonly rpcExceptionService: RpcExceptionService
   ) {}
 
   async checkAccessControl(
@@ -23,21 +24,13 @@ export class AccessService {
 
     const isTokenValidated = Boolean(jwtTokenPayload);
 
-    if (!jwtTokenPayload.exp && !isTokenValidated)
-      throw new RpcException({
-        statusCode: 401,
-        errorStatus: 'Token has expired, please sign in',
-      });
+    if (!jwtTokenPayload.exp && !isTokenValidated) this.rpcExceptionService.throwUnauthorised('Token has expired, please sign in')
 
     const authObject = await this.queryBus.execute(
       new GetUserIdQuery({ payload: jwtTokenPayload.jwt_payload }),
     );
 
-    if (authObject.auth_id !== id)
-      throw new RpcException({
-        statusCode: 403,
-        errorStatus: 'Forbidden resource',
-      });
+    if (authObject.auth_id !== id) this.rpcExceptionService.throwForbidden('Forbidden resource')
 
     return isTokenValidated && authObject.auth_id === id;
   }

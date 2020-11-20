@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,6 +8,7 @@ import { UserRepository } from '../../../db/repositories';
 import { IJwtPayload } from '../../interfaces/jwt-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { PasswordUtilsService } from 'src/utils/password-utils';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
@@ -18,6 +18,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     private readonly jwtService: JwtService,
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly configService: ConfigService,
+    private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(command: SignInCommand) {
@@ -25,11 +26,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
       email: command.authCredentials.email,
     });
 
-    if (!user)
-      throw new RpcException({
-        statusCode: 404,
-        errorStatus: 'User not found',
-      });
+    if (!user) this.rpcExceptionService.throwNotFound('User not found')
 
     if (
       await this.passwordUtilsService.validatePassword(
@@ -47,16 +44,10 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
 
         return { accessToken };
       } catch (error) {
-        throw new RpcException({
-          statusCode: 401,
-          errorStatus: 'Cannot sign in',
-        });
+        this.rpcExceptionService.throwUnauthorised('Cannot sign in')
       }
     } else {
-      throw new RpcException({
-        statusCode: 401,
-        errorStatus: 'Invalid credentials',
-      });
+      this.rpcExceptionService.throwUnauthorised('Invalid credentials')
     }
   }
 }

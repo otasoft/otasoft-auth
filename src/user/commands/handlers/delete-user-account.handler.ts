@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
+import { RpcExceptionService } from '../../../utils/exception-handling';
 import { UserRepository } from '../../../db/repositories';
 import { DeleteUserAccountCommand } from '../impl';
 
@@ -11,6 +11,7 @@ export class DeleteUserAccountHandler
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(command: DeleteUserAccountCommand) {
@@ -22,7 +23,7 @@ export class DeleteUserAccountHandler
         response: `User with id #${command.id} successfuly deleted`,
       };
     } catch (error) {
-      throw new RpcException(error);
+      this.rpcExceptionService.throwCatchedException(error);
     }
   }
 }

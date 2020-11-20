@@ -1,11 +1,11 @@
 import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
 
 import { IConfirmedAccountObject } from '../../interfaces';
 import { UserRepository } from '../../../db/repositories';
 import { GetConfirmedUserQuery } from '../impl';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 
 @QueryHandler(GetConfirmedUserQuery)
 export class GetConfirmedUserHandler
@@ -13,6 +13,7 @@ export class GetConfirmedUserHandler
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
+    private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(
@@ -25,9 +26,7 @@ export class GetConfirmedUserHandler
       where: { id: id, email: email },
     });
 
-    if (!user) {
-      throw new RpcException('Account not confirmed');
-    }
+    if (!user) this.rpcExceptionService.throwNotFound('Account not confirmed')
 
     return {
       isAccountConfirmed: true,

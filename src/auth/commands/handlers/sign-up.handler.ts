@@ -1,6 +1,5 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserRepository } from '../../../db/repositories';
 import { SignUpCommand } from '../impl';
 import { PasswordUtilsService } from '../../../utils/password-utils';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
@@ -15,6 +15,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
+    private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(command: SignUpCommand) {
@@ -42,7 +43,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     } catch (error) {
       const conflictExceptionCode = '23505';
       if (error.code === conflictExceptionCode) {
-        throw new RpcException('Email already registered');
+        this.rpcExceptionService.throwConflict('Email already registered')
       } else {
         throw new InternalServerErrorException();
       }

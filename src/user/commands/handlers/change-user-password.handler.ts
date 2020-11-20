@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
+import { RpcExceptionService } from 'src/utils/exception-handling';
 
 import { UserRepository } from '../../../db/repositories';
 import { PasswordUtilsService } from '../../../utils/password-utils';
@@ -13,6 +13,7 @@ export class ChangeUserPasswordHandler
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
+    private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(command: ChangeUserPasswordCommand) {
@@ -20,11 +21,7 @@ export class ChangeUserPasswordHandler
       id: command.changePasswordDto.id,
     });
 
-    if (!user)
-      throw new RpcException({
-        statusCode: 403,
-        errorStatus: 'User not found',
-      });
+    if (!user) this.rpcExceptionService.throwNotFound('User not found')
 
     if (
       await this.passwordUtilsService.validatePassword(
@@ -43,13 +40,10 @@ export class ChangeUserPasswordHandler
           response: 'Password changed successfuly',
         };
       } catch (error) {
-        throw new RpcException(error);
+        this.rpcExceptionService.throwCatchedException(error)
       }
     } else {
-      throw new RpcException({
-        statusCode: 403,
-        errorStatus: 'Old password is invalid',
-      });
+      this.rpcExceptionService.throwForbidden('Old password is invalid');
     }
   }
 }
