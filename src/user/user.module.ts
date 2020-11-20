@@ -7,7 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommandHandlers } from 'src/auth/commands/handlers';
 import { jwtModuleOptions } from 'src/auth/jwt/jwt-module-options';
 import { JwtStrategy } from 'src/auth/jwt/jwt-strategy';
-import { QueryHandlers } from 'src/auth/queries/handlers';
+import { QueryHandlers } from 'src/user/queries/handlers';
 import { UserRepository } from 'src/db/repositories';
 import { PasswordUtilsService } from 'src/utils/password-utils';
 import { UserController } from './controllers/user.controller';

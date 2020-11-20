@@ -4,12 +4,12 @@ import {
   ChangeUserPasswordCommand,
   ConfirmAccountCreationCommand,
   DeleteUserAccountCommand,
-} from 'src/auth/commands/impl';
+} from '../commands/impl';
 import { AuthConfirmationDto } from 'src/auth/dto/auth-confirmation.dto';
 import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
 import { GetUserIdDto } from 'src/auth/dto/get-user-id.dto';
 import { IConfirmedAccountObject } from 'src/auth/interfaces/confirmed-acount-object.interface';
-import { GetConfirmedUserQuery, GetUserIdQuery } from 'src/auth/queries/impl';
+import { GetConfirmedUserQuery, GetUserIdQuery } from 'src/user/queries/impl';
 
 @Injectable()
 export class UserService {
