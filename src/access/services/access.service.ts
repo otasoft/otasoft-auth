@@ -3,8 +3,7 @@ import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { RpcException } from '@nestjs/microservices';
 
-import { AccessControlDto } from 'src/auth/dto/access-control.dto';
-import { JwtAuthDto } from 'src/auth/dto/jwt-auth.dto';
+import { AccessControlDto, JwtAuthDto } from '../dto';
 import { IJwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
 import { GetUserIdQuery } from 'src/user/queries/impl';
 

@@ -1,9 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { AuthConfirmationDto } from 'src/auth/dto/auth-confirmation.dto';
-import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
-import { GetUserIdDto } from 'src/auth/dto/get-user-id.dto';
-import { UserService } from 'src/user/services/user.service';
+
+import { AuthConfirmationDto, ChangePasswordDto } from '../dto';
+import { GetUserIdDto } from '../dto/get-user-id.dto';
+import { UserService } from '../services/user.service';
 
 @Controller('user')
 export class UserController {

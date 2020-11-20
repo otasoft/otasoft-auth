@@ -1,4 +1,4 @@
-import { AuthCredentialsDto } from 'src/auth/dto/auth-credentials.dto';
+import { AuthCredentialsDto } from '../../dto';
 
 export class SignInCommand {
   constructor(public readonly authCredentials: AuthCredentialsDto) {}

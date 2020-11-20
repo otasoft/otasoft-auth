@@ -1,8 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
-import { AccessControlDto } from 'src/auth/dto/access-control.dto';
-import { JwtAuthDto } from 'src/auth/dto/jwt-auth.dto';
+import { AccessControlDto, JwtAuthDto } from '../dto';
 import { AccessService } from '../services/access.service';
 
 @Controller('access')

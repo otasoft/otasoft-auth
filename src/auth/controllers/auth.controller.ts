@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
 import { AuthService } from '../services/auth.service';
-import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
+import { AuthCredentialsDto } from '../dto';
 
 @Controller('auth')
 export class AuthController {

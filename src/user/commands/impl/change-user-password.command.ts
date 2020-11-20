@@ -1,4 +1,4 @@
-import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
+import { ChangePasswordDto } from '../../dto';
 
 export class ChangeUserPasswordCommand {
   constructor(public readonly changePasswordDto: ChangePasswordDto) {}

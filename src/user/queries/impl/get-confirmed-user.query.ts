@@ -1,4 +1,4 @@
-import { AuthConfirmationDto } from 'src/auth/dto/auth-confirmation.dto';
+import { AuthConfirmationDto } from '../../dto';
 
 export class GetConfirmedUserQuery {
   constructor(public readonly authConfirmationDto: AuthConfirmationDto) {}

@@ -1,15 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
 import {
   ChangeUserPasswordCommand,
   ConfirmAccountCreationCommand,
   DeleteUserAccountCommand,
 } from '../commands/impl';
-import { AuthConfirmationDto } from 'src/auth/dto/auth-confirmation.dto';
-import { ChangePasswordDto } from 'src/auth/dto/change-password.dto';
-import { GetUserIdDto } from 'src/auth/dto/get-user-id.dto';
+import { AuthConfirmationDto, ChangePasswordDto, GetUserIdDto } from '../dto';
 import { IConfirmedAccountObject } from 'src/auth/interfaces/confirmed-acount-object.interface';
-import { GetConfirmedUserQuery, GetUserIdQuery } from 'src/user/queries/impl';
+import { GetConfirmedUserQuery, GetUserIdQuery } from '../queries/impl';
 
 @Injectable()
 export class UserService {
