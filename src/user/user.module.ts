@@ -1,22 +1,18 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommandHandlers } from 'src/auth/commands/handlers';
-import { jwtModuleOptions } from 'src/auth/jwt/jwt-module-options';
-import { JwtStrategy } from 'src/auth/jwt/jwt-strategy';
-import { QueryHandlers } from 'src/user/queries/handlers';
-import { UserRepository } from 'src/db/repositories';
-import { PasswordUtilsService } from 'src/utils/password-utils';
+
+import { CommandHandlers } from './commands/handlers';
+import { JwtStrategy } from '../passport-jwt/jwt-strategy';
+import { QueryHandlers } from './queries/handlers';
+import { UserRepository } from '../db/repositories';
+import { PasswordUtilsService } from '../utils/password-utils';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 
 @Module({
     imports: [
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.registerAsync(jwtModuleOptions),
         TypeOrmModule.forFeature([UserRepository]),
         CqrsModule,
     ],

@@ -8,6 +8,7 @@ import { UtilsModule } from './utils/utils.module';
 import { HealthModule } from './health/health.module';
 import { AccessModule } from './access/access.module';
 import { UserModule } from './user/user.module';
+import { PassportJwtModule } from './passport-jwt/passport-jwt.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from './user/user.module';
     HealthModule,
     AccessModule,
     UserModule,
+    PassportJwtModule,
   ],
 })
 export class AppModule {}
