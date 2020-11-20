@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { AuthCredentialsDto } from '../../dto/auth-credentials.dto';
-import { SignUpCommand, SignInCommand } from '../../commands/impl';
+import { AuthCredentialsDto } from '../dto/auth-credentials.dto';
+import { SignUpCommand, SignInCommand } from '../commands/impl';
 
 @Injectable()
 export class AuthService {
