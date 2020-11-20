@@ -8,7 +8,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
 import { JwtStrategy } from './jwt/jwt-strategy';
-import { UserRepository } from './repositories/user.repository';
+import { UserRepository } from '../db/repositories';
 import { QueryHandlers } from './queries/handlers';
 import { CommandHandlers } from './commands/handlers';
 import { jwtModuleOptions } from './jwt/jwt-module-options';

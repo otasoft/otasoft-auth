@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 
 import { SignInCommand } from '../../impl';
-import { UserRepository } from '../../../repositories/user.repository';
+import { UserRepository } from '../../../../db/repositories';
 import { IJwtPayload } from '../../../interfaces/jwt-payload.interface';
 import { ConfigService } from '@nestjs/config';
 import { PasswordUtilsService } from 'src/utils/password-utils';

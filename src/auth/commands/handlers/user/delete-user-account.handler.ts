@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { UserRepository } from '../../../repositories/user.repository';
+import { UserRepository } from '../../../../db/repositories';
 import { DeleteUserAccountCommand } from '../../impl';
 
 @CommandHandler(DeleteUserAccountCommand)
