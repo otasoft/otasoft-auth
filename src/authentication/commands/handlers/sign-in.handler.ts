@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { SignInCommand } from '../impl';
 import { UserRepository } from '../../../db/repositories';
-import { IJwtPayload } from '../../../passport-jwt/jwt-payload.interface';
+import { IJwtPayload } from '../../../passport-jwt/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { PasswordUtilsService } from '../../../utils/password-utils';
 import { RpcExceptionService } from '../../../utils/exception-handling';

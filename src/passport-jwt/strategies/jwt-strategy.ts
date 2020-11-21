@@ -5,8 +5,8 @@ import { RpcException } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { Strategy, ExtractJwt } from 'passport-jwt';
 
-import { IJwtPayload } from './jwt-payload.interface';
-import { UserRepository } from '../db/repositories';
+import { IJwtPayload } from '../interfaces';
+import { UserRepository } from '../../db/repositories';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

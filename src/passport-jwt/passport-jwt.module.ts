@@ -1,12 +1,12 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserRepository } from '../db/repositories';
-import { jwtModuleOptions } from './jwt-module-options';
-import { JwtStrategy } from './jwt-strategy';
+import { JwtStrategy } from './strategies';
+import { jwtModuleOptions } from './config/jwt-module-options';
 
 @Global()
 @Module({
