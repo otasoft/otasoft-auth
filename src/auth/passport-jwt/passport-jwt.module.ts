@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserRepository } from '../../db/repositories';
 import { JwtStrategy } from './strategies';
+import { JwtTokenService } from './services';
 import { jwtModuleOptions } from './config/jwt-module-options';
 
 @Global()
@@ -15,7 +16,7 @@ import { jwtModuleOptions } from './config/jwt-module-options';
         JwtModule.registerAsync(jwtModuleOptions),
         TypeOrmModule.forFeature([UserRepository]),
     ],
-    providers: [ConfigService, JwtStrategy],
-    exports: [PassportJwtModule, JwtStrategy, JwtModule]
+    providers: [ConfigService, JwtStrategy, JwtTokenService],
+    exports: [PassportJwtModule, JwtStrategy, JwtModule, JwtTokenService]
 })
 export class PassportJwtModule {}

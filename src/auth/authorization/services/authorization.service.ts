@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
-import { JwtService } from '@nestjs/jwt';
 
 import { AccessControlDto, JwtAuthDto } from '../dto';
 import { IJwtPayload } from '../../passport-jwt/interfaces';
 import { GetUserIdQuery } from '../../user/queries/impl/get-user-id.query';
 import { RpcExceptionService } from '../../../utils/exception-handling';
+import { JwtTokenService } from '../../passport-jwt/services';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
-    private readonly jwtService: JwtService,
     private readonly queryBus: QueryBus,
-    private readonly rpcExceptionService: RpcExceptionService
+    private readonly rpcExceptionService: RpcExceptionService,
+    private readonly jwtTokenService: JwtTokenService,
   ) {}
 
   async checkAccessControl(
@@ -36,13 +36,6 @@ export class AuthorizationService {
   }
 
   validateToken(jwtDataObject: JwtAuthDto) {
-    const { jwt } = jwtDataObject;
-    try {
-      const res = this.jwtService.verify(jwt);
-
-      return res;
-    } catch (e) {
-      return false;
-    }
+    return this.jwtTokenService.validateToken(jwtDataObject);
   }
 }

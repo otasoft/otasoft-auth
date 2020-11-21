@@ -1,24 +1,21 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 
 import { SignInCommand } from '../impl';
 import { UserRepository } from '../../../../db/repositories';
-import { IJwtPayload } from '../../../passport-jwt/interfaces';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
+import { JwtTokenService } from '../../../passport-jwt/services';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
-    private readonly jwtService: JwtService,
     private readonly passwordUtilsService: PasswordUtilsService,
-    private readonly configService: ConfigService,
     private readonly rpcExceptionService: RpcExceptionService,
+    private readonly jwtTokenService: JwtTokenService,
   ) {}
 
   async execute(command: SignInCommand) {
@@ -39,10 +36,9 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
         user.jwt_payload = jwtPayload;
         user.save();
 
-        const payload: IJwtPayload = { jwt_payload: jwtPayload };
-        const accessToken: string = await this.jwtService.sign(payload);
-
-        return { accessToken };
+        const cookie = this.jwtTokenService.createCookieWithJwtToken(jwtPayload);
+        
+        return { cookie };
       } catch (error) {
         this.rpcExceptionService.throwUnauthorised('Cannot sign in')
       }
