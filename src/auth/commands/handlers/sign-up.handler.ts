@@ -8,6 +8,7 @@ import { UserRepository } from '../../../db/repositories';
 import { SignUpCommand } from '../impl';
 import { PasswordUtilsService } from '../../../utils/password-utils';
 import { RpcExceptionService } from '../../../utils/exception-handling';
+import { ErrorValidationService } from 'src/utils/error-validation';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
@@ -16,6 +17,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     private readonly userRepository: UserRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
+    private readonly errorValidationService: ErrorValidationService,
   ) {}
 
   async execute(command: SignUpCommand) {
@@ -41,12 +43,9 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
         token: token,
       };
     } catch (error) {
-      const conflictExceptionCode = '23505';
-      if (error.code === conflictExceptionCode) {
-        this.rpcExceptionService.throwConflict('Email already registered')
-      } else {
-        throw new InternalServerErrorException();
-      }
+      const errorObject = this.errorValidationService.validateDbError(error);
+
+      this.rpcExceptionService.throwCatchedException(errorObject)
     }
   }
 }

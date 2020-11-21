@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
+import { DbErrorCodes } from './db-error-codes.enum';
 import { IErrorObject } from './error-object.interface';
 
 @Injectable()
 export class ErrorValidationService {
   /**
-   * A method that returns a correct exception object based on the errorCode provided as a parameter
+   * A method that returns a correct HTTP exception object based on the database error code provided as a parameter
    *
    * @param {string} errorCode
    * @return {*}  {IErrorObject}
    */
-  validateError(errorCode: string): IErrorObject {
+  validateDbError(errorCode: string): IErrorObject {
     switch (errorCode) {
-      case 'ER_DUP_ENTRY':
+      case DbErrorCodes.UniqueViolation:
         return { code: 409, message: 'Duplicated entry' };
       default:
         return { code: 400, message: 'Bad Request' };
