@@ -5,7 +5,7 @@ import { AuthCredentialsDto } from '../dto';
 import { SignUpCommand, SignInCommand } from '../commands/impl';
 
 @Injectable()
-export class AuthService {
+export class AuthenticationService {
   constructor(private readonly commandBus: CommandBus) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {

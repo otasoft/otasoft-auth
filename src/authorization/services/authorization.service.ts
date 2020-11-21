@@ -3,8 +3,8 @@ import { QueryBus } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
 import { AccessControlDto, JwtAuthDto } from '../dto';
-import { IJwtPayload } from 'src/auth/interfaces/jwt-payload.interface';
-import { GetUserIdQuery } from 'src/user/queries/impl';
+import { IJwtPayload } from '../../passport-jwt/jwt-payload.interface';
+import { GetUserIdQuery } from '../../user/queries/impl/get-user-id.query';
 import { RpcExceptionService } from '../../utils/exception-handling';
 
 @Injectable()

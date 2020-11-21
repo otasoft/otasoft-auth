@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { AuthController } from './controllers/auth.controller';
-import { AuthService } from './services/auth.service';
+import { AuthenticationController } from './controllers/authentication.controller';
+import { AuthenticationService } from './services/authentication.service';
 import { JwtStrategy } from '../passport-jwt/jwt-strategy';
 import { UserRepository } from '../db/repositories';
 import { CommandHandlers } from './commands/handlers';
@@ -15,13 +15,13 @@ import { PasswordUtilsService } from '../utils/password-utils';
     TypeOrmModule.forFeature([UserRepository]),
     CqrsModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthenticationController],
   providers: [
-    AuthService,
+    AuthenticationService,
     JwtStrategy,
     ConfigService,
     PasswordUtilsService,
     ...CommandHandlers,
   ],
 })
-export class AuthModule {}
+export class AuthenticationModule {}
