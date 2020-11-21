@@ -2,8 +2,8 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { GetUserIdQuery } from '../impl';
-import { UserRepository } from '../../../db/repositories';
-import { RpcExceptionService } from '../../../utils/exception-handling';
+import { UserRepository } from '../../../../db/repositories';
+import { RpcExceptionService } from '../../../../utils/exception-handling';
 
 @QueryHandler(GetUserIdQuery)
 export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {

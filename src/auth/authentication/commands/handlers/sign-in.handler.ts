@@ -1,14 +1,14 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 
 import { SignInCommand } from '../impl';
-import { UserRepository } from '../../../db/repositories';
+import { UserRepository } from '../../../../db/repositories';
 import { IJwtPayload } from '../../../passport-jwt/interfaces';
-import { ConfigService } from '@nestjs/config';
-import { PasswordUtilsService } from '../../../utils/password-utils';
-import { RpcExceptionService } from '../../../utils/exception-handling';
+import { PasswordUtilsService } from '../../../../utils/password-utils';
+import { RpcExceptionService } from '../../../../utils/exception-handling';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {

@@ -6,8 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommandHandlers } from './commands/handlers';
 import { JwtStrategy } from '../passport-jwt/strategies';
 import { QueryHandlers } from './queries/handlers';
-import { UserRepository } from '../db/repositories';
-import { PasswordUtilsService } from '../utils/password-utils';
+import { UserRepository } from '../../db/repositories';
+import { PasswordUtilsService } from '../../utils/password-utils';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 

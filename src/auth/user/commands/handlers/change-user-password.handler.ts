@@ -2,8 +2,8 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RpcExceptionService } from 'src/utils/exception-handling';
 
-import { UserRepository } from '../../../db/repositories';
-import { PasswordUtilsService } from '../../../utils/password-utils';
+import { UserRepository } from '../../../../db/repositories';
+import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { ChangeUserPasswordCommand } from '../impl';
 
 @CommandHandler(ChangeUserPasswordCommand)

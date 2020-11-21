@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
 
 import { IConfirmedAccountObject } from '../../interfaces';
-import { UserRepository } from '../../../db/repositories';
+import { UserRepository } from '../../../../db/repositories';
 import { GetConfirmedUserQuery } from '../impl';
-import { RpcExceptionService } from '../../../utils/exception-handling';
+import { RpcExceptionService } from '../../../../utils/exception-handling';
 
 @QueryHandler(GetConfirmedUserQuery)
 export class GetConfirmedUserHandler

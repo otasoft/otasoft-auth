@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { RpcExceptionService } from '../../utils/exception-handling';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 import {
   ChangeUserPasswordCommand,
   ConfirmAccountCreationCommand,

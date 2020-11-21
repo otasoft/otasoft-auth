@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AccessControlDto, JwtAuthDto } from '../dto';
 import { IJwtPayload } from '../../passport-jwt/interfaces';
 import { GetUserIdQuery } from '../../user/queries/impl/get-user-id.query';
-import { RpcExceptionService } from '../../utils/exception-handling';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 
 @Injectable()
 export class AuthorizationService {

@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UserRepository } from '../db/repositories';
+import { UserRepository } from '../../db/repositories';
 import { JwtStrategy } from './strategies';
 import { jwtModuleOptions } from './config/jwt-module-options';
 
