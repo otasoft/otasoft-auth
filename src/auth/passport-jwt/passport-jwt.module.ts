@@ -11,12 +11,12 @@ import { jwtModuleOptions } from './config/jwt-module-options';
 
 @Global()
 @Module({
-    imports: [
-        PassportModule.register({ defaultStrategy: 'jwt' }),
-        JwtModule.registerAsync(jwtModuleOptions),
-        TypeOrmModule.forFeature([UserRepository]),
-    ],
-    providers: [ConfigService, JwtStrategy, JwtTokenService],
-    exports: [PassportJwtModule, JwtStrategy, JwtModule, JwtTokenService]
+  imports: [
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync(jwtModuleOptions),
+    TypeOrmModule.forFeature([UserRepository]),
+  ],
+  providers: [ConfigService, JwtStrategy, JwtTokenService],
+  exports: [PassportJwtModule, JwtStrategy, JwtModule, JwtTokenService],
 })
 export class PassportJwtModule {}

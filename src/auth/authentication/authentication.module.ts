@@ -11,10 +11,7 @@ import { CommandHandlers } from './commands/handlers';
 import { PasswordUtilsService } from '../../utils/password-utils';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserRepository]),
-    CqrsModule,
-  ],
+  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
   controllers: [AuthenticationController],
   providers: [
     AuthenticationService,

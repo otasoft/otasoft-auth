@@ -30,12 +30,12 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
       record_id: event.entity.id,
       record_value: event.entity.email,
       timestamp: new Date(),
-    })
+    });
 
     try {
-      await newLog.save()
+      await newLog.save();
     } catch (error) {
-      console.log('error when logging after insert event')
+      console.log('error when logging after insert event');
     }
   }
 
@@ -46,12 +46,12 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
       record_id: event.entity.id,
       record_value: event.entity.email,
       timestamp: new Date(),
-    })
+    });
 
     try {
-      await newLog.save()
+      await newLog.save();
     } catch (error) {
-      console.log('error when logging before update event')
+      console.log('error when logging before update event');
     }
   }
 
@@ -62,12 +62,12 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
       record_id: event.entity.id,
       record_value: event.entity.email,
       timestamp: new Date(),
-    })
+    });
 
     try {
-      await newLog.save()
+      await newLog.save();
     } catch (error) {
-      console.log('error when logging after update event')
+      console.log('error when logging after update event');
     }
   }
 
@@ -78,12 +78,12 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
       record_id: event.entity.id,
       record_value: event.entity.email,
       timestamp: new Date(),
-    })
+    });
 
     try {
-      await newLog.save()
+      await newLog.save();
     } catch (error) {
-      console.log('error when logging before delete event')
+      console.log('error when logging before delete event');
     }
   }
 }

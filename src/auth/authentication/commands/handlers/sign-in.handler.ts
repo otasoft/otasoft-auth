@@ -23,7 +23,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
       email: command.authCredentials.email,
     });
 
-    if (!user) this.rpcExceptionService.throwNotFound('User not found')
+    if (!user) this.rpcExceptionService.throwNotFound('User not found');
 
     if (
       await this.passwordUtilsService.validatePassword(
@@ -36,14 +36,16 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
         user.jwt_payload = jwtPayload;
         user.save();
 
-        const cookie = this.jwtTokenService.createCookieWithJwtToken(jwtPayload);
-        
+        const cookie = this.jwtTokenService.createCookieWithJwtToken(
+          jwtPayload,
+        );
+
         return { cookie };
       } catch (error) {
-        this.rpcExceptionService.throwUnauthorised('Cannot sign in')
+        this.rpcExceptionService.throwUnauthorised('Cannot sign in');
       }
     } else {
-      this.rpcExceptionService.throwUnauthorised('Invalid credentials')
+      this.rpcExceptionService.throwUnauthorised('Invalid credentials');
     }
   }
 }

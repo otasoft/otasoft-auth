@@ -18,7 +18,7 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
       where: { jwt_payload: query.getUserIdDto.payload },
     });
 
-    if (!user) this.rpcExceptionService.throwNotFound('User does not exist')
+    if (!user) this.rpcExceptionService.throwNotFound('User does not exist');
 
     return { auth_id: user.id };
   }

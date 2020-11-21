@@ -21,7 +21,7 @@ export class ChangeUserPasswordHandler
       id: command.changePasswordDto.id,
     });
 
-    if (!user) this.rpcExceptionService.throwNotFound('User not found')
+    if (!user) this.rpcExceptionService.throwNotFound('User not found');
 
     if (
       await this.passwordUtilsService.validatePassword(
@@ -40,7 +40,7 @@ export class ChangeUserPasswordHandler
           response: 'Password changed successfuly',
         };
       } catch (error) {
-        this.rpcExceptionService.throwCatchedException(error)
+        this.rpcExceptionService.throwCatchedException(error);
       }
     } else {
       this.rpcExceptionService.throwForbidden('Old password is invalid');

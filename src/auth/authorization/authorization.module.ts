@@ -9,10 +9,7 @@ import { AuthorizationController } from './controllers/authorization.controller'
 import { AuthorizationService } from './services/authorization.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserRepository]),
-    CqrsModule,
-  ],
+  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
   controllers: [AuthorizationController],
   providers: [AuthorizationService, JwtStrategy, ConfigService],
 })

@@ -23,7 +23,7 @@ import { LogRepository, UserRepository } from './repositories';
         entities: [UserEntity, LogEntity],
       }),
     }),
-    TypeOrmModule.forFeature([LogRepository])
+    TypeOrmModule.forFeature([LogRepository]),
   ],
   providers: [UserSubscriber],
 })

@@ -5,11 +5,11 @@ import { PassportJwtModule } from './passport-jwt/passport-jwt.module';
 import { UserModule } from './user/user.module';
 
 @Module({
-    imports: [
-        PassportJwtModule,
-        AuthenticationModule,
-        AuthorizationModule,
-        UserModule,
-    ]
+  imports: [
+    PassportJwtModule,
+    AuthenticationModule,
+    AuthorizationModule,
+    UserModule,
+  ],
 })
 export class AuthModule {}

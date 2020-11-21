@@ -41,7 +41,7 @@ export class UserService {
     const accountConfirmObject: IConfirmedAccountObject = await this.queryBus.execute(
       new GetConfirmedUserQuery(authConfirmationDto),
     );
-    
+
     if (!accountConfirmObject) this.rpcExceptionService.throwBadRequest();
 
     await this.commandBus.execute(

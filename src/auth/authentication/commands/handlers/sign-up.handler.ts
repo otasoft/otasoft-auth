@@ -44,7 +44,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     } catch (error) {
       const errorObject = this.errorValidationService.validateDbError(error);
 
-      this.rpcExceptionService.throwCatchedException(errorObject)
+      this.rpcExceptionService.throwCatchedException(errorObject);
     }
   }
 }

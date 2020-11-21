@@ -12,18 +12,15 @@ import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([UserRepository]),
-        CqrsModule,
-    ],
-    controllers: [UserController],
-    providers: [
-        UserService,
-        JwtStrategy,
-        ConfigService,
-        PasswordUtilsService,
-        ...QueryHandlers,
-        ...CommandHandlers,
-    ],
+  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
+  controllers: [UserController],
+  providers: [
+    UserService,
+    JwtStrategy,
+    ConfigService,
+    PasswordUtilsService,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
 })
 export class UserModule {}

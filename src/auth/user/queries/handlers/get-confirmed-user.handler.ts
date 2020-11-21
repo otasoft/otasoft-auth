@@ -26,7 +26,7 @@ export class GetConfirmedUserHandler
       where: { id: id, email: email },
     });
 
-    if (!user) this.rpcExceptionService.throwNotFound('Account not confirmed')
+    if (!user) this.rpcExceptionService.throwNotFound('Account not confirmed');
 
     return {
       isAccountConfirmed: true,
