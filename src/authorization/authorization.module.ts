@@ -5,15 +5,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { JwtStrategy } from '../passport-jwt/jwt-strategy';
 import { UserRepository } from '../db/repositories';
-import { AccessController } from './controllers/access.controller';
-import { AccessService } from './services/access.service';
+import { AuthorizationController } from './controllers/authorization.controller';
+import { AuthorizationService } from './services/authorization.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserRepository]),
     CqrsModule,
   ],
-  controllers: [AccessController],
-  providers: [AccessService, JwtStrategy, ConfigService],
+  controllers: [AuthorizationController],
+  providers: [AuthorizationService, JwtStrategy, ConfigService],
 })
-export class AccessModule {}
+export class AuthorizationModule {}

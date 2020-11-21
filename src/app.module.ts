@@ -6,7 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { DbModule } from './db/db.module';
 import { UtilsModule } from './utils/utils.module';
 import { HealthModule } from './health/health.module';
-import { AccessModule } from './access/access.module';
+import { AuthorizationModule } from './authorization/authorization.module';
 import { UserModule } from './user/user.module';
 import { PassportJwtModule } from './passport-jwt/passport-jwt.module';
 
@@ -19,7 +19,7 @@ import { PassportJwtModule } from './passport-jwt/passport-jwt.module';
     AuthModule,
     UtilsModule,
     HealthModule,
-    AccessModule,
+    AuthorizationModule,
     UserModule,
     PassportJwtModule,
   ],

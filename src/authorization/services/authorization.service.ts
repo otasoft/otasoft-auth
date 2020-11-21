@@ -8,7 +8,7 @@ import { GetUserIdQuery } from 'src/user/queries/impl';
 import { RpcExceptionService } from '../../utils/exception-handling';
 
 @Injectable()
-export class AccessService {
+export class AuthorizationService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly queryBus: QueryBus,

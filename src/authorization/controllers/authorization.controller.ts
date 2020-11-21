@@ -2,11 +2,11 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
 import { AccessControlDto, JwtAuthDto } from '../dto';
-import { AccessService } from '../services/access.service';
+import { AuthorizationService } from '../services/authorization.service';
 
-@Controller('access')
-export class AccessController {
-  constructor(private readonly accessService: AccessService) {}
+@Controller('authorization')
+export class AuthorizationController {
+  constructor(private readonly accessService: AuthorizationService) {}
 
   @MessagePattern({ role: 'auth', cmd: 'checkJwt' })
   validateToken(jwtDataObject: JwtAuthDto): boolean {
