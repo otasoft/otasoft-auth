@@ -20,7 +20,7 @@ export class AuthenticationService {
 
   async logout(): Promise<{ response: string }> {
     return new Promise((resolve, reject) => {
-      resolve({ response: 'Successfuly logged out' });
+      resolve({ response: `Authentication=; HttpOnly; Path=/; Max-Age=0` });
     });
   }
 }
