@@ -14,7 +14,7 @@ export class AuthenticationService {
 
   async signIn(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ cookie: string }> {
+  ): Promise<string[]> {
     return this.commandBus.execute(new SignInCommand(authCredentialsDto));
   }
 

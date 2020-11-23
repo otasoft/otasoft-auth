@@ -9,6 +9,7 @@ import { JwtStrategy } from '../passport-jwt/strategies';
 import { UserRepository } from '../../db/repositories';
 import { CommandHandlers } from './commands/handlers';
 import { PasswordUtilsService } from '../../utils/password-utils';
+import { AuthorizationService } from '../authorization/services/authorization.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
@@ -19,6 +20,7 @@ import { PasswordUtilsService } from '../../utils/password-utils';
     ConfigService,
     PasswordUtilsService,
     ...CommandHandlers,
+    AuthorizationService
   ],
 })
 export class AuthenticationModule {}

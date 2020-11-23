@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { AccessControlDto, JwtAuthDto } from '../dto';
 import { IJwtPayload } from '../../passport-jwt/interfaces';
 import { GetUserIdQuery } from '../../user/queries/impl/get-user-id.query';
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import { JwtTokenService } from '../../passport-jwt/services';
+import { SetRefreshTokenCommand } from '../commands/impl';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
     private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly jwtTokenService: JwtTokenService,
   ) {}
@@ -41,5 +43,9 @@ export class AuthorizationService {
 
   validateToken(jwtDataObject: JwtAuthDto) {
     return this.jwtTokenService.validateToken(jwtDataObject);
+  }
+
+  async setRefreshToken(refreshToken: string, userId: number) {
+    return await this.commandBus.execute(new SetRefreshTokenCommand(refreshToken, userId));
   }
 }

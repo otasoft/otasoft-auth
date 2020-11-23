@@ -7,6 +7,7 @@ import { UserRepository } from '../../../../db/repositories';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { JwtTokenService } from '../../../passport-jwt/services';
+import { AuthorizationService } from '../../../../auth/authorization/services/authorization.service';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
@@ -16,6 +17,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly jwtTokenService: JwtTokenService,
+    private readonly authorizationService: AuthorizationService,
   ) {}
 
   async execute(command: SignInCommand) {
@@ -40,7 +42,12 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
           jwtPayload,
         );
 
-        return { cookie };
+        const accessTokenCookie = this.jwtTokenService.getCookieWithJwtAccessToken(user.id);
+        const refreshTokenCookie = this.jwtTokenService.getCookieWithJwtRefreshToken(user.id);
+     
+        await this.authorizationService.setRefreshToken(refreshTokenCookie.token, user.id);
+
+        return [accessTokenCookie, refreshTokenCookie];
       } catch (error) {
         this.rpcExceptionService.throwUnauthorised('Cannot sign in');
       }

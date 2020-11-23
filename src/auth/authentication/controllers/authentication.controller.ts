@@ -16,7 +16,7 @@ export class AuthenticationController {
   @MessagePattern({ role: 'auth', cmd: 'login' })
   async signIn(
     authCredentialsDto: AuthCredentialsDto,
-  ): Promise<{ cookie: string }> {
+  ): Promise<string[]> {
     return this.authenticationService.signIn(authCredentialsDto);
   }
 
