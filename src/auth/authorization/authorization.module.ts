@@ -7,10 +7,11 @@ import { JwtStrategy } from '../passport-jwt/strategies';
 import { UserRepository } from '../../db/repositories';
 import { AuthorizationController } from './controllers/authorization.controller';
 import { AuthorizationService } from './services/authorization.service';
+import { CommandHandlers } from './commands/handlers';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, JwtStrategy, ConfigService],
+  providers: [AuthorizationService, JwtStrategy, ConfigService, ...CommandHandlers],
 })
 export class AuthorizationModule {}

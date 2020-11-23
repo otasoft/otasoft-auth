@@ -20,6 +20,10 @@ export class UserEntity extends BaseEntity {
   @Exclude()
   password: string;
 
+  @Column({ nullable: true })
+  @Exclude()
+  hashedRefreshToken?: string;
+
   @Column()
   jwt_payload: string;
 

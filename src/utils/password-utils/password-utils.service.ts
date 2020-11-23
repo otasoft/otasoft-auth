@@ -49,4 +49,21 @@ export class PasswordUtilsService {
       userPassword,
     );
   }
+
+  /**
+   * Method that hashes the content specified amount of times.
+   * Uses `bcrypt.hash()` method that returns hashed content as string.
+   * @param {string} [content]
+   * @param {number} [rounds]
+   * @return {string}  {String}
+   * @memberof PasswordUtilsService
+   */
+  async hashContent(
+    content: string,
+    rounds: number,
+  ): Promise<string> {
+    const hashedContent = await bcrypt.hash(content, rounds);
+
+    return hashedContent;
+  }
 }
