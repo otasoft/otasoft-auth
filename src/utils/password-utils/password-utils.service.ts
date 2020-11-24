@@ -6,24 +6,38 @@ import * as bcrypt from 'bcrypt';
 export class PasswordUtilsService {
   constructor(private readonly configService: ConfigService) {}
   /**
-   * Method that hashes the password with salt provided as parameter.
-   * Uses `bcrypt.hash()` method with password and salt as parameters.
-   * Also, adds `HASH_PEPPER` environment variable to password.
-   * @param {string} [password]
-   * @param {string} [salt]
-   * @return {*}  {String}
+   * Method that hashes the content specified amount of times.
+   * Uses `bcrypt.hash()` method that returns hashed content as string.
+   * @param {string} [content]
+   * @param {number} [rounds]
+   * @return {string}  {String}
    * @memberof PasswordUtilsService
    */
-  async hashPassword(password: string, salt: string): Promise<string> {
-    return await bcrypt.hash(
-      password + this.configService.get<string>('HASH_PEPPER'),
-      salt,
-    );
+  async hashContent(
+    contentToHash: string,
+    roundsOrSalt: number | string,
+  ): Promise<string> {
+    return await bcrypt.hash(contentToHash, roundsOrSalt);
   }
 
   /**
+   * Method that compares two bcrypt hashed values.
+   * Uses `bcrypt.compare()` method that returns true when two variables are the same.
+   * @param {string} [providedContent]
+   * @param {number} [userContent]
+   * @return {string}  {String}
+   * @memberof PasswordUtilsService
+   */
+  async compareContent(
+    providedContent: string,
+    userContent: string,
+  ): Promise<boolean> {
+    return await bcrypt.compare(providedContent, userContent);
+  }
+  
+  /**
    * Method that generates `salt` that can be added to the password when signing up.
-   * Uses `bcrypt.getSalt()` method and returns a string salt.
+   * Uses `bcrypt.genSalt()` method and returns a string salt.
    * @return {*}  {String}
    * @memberof PasswordUtilsService
    */
@@ -32,9 +46,23 @@ export class PasswordUtilsService {
   }
 
   /**
+   * Method that hashes the password with salt provided as parameter.
+   * Adds `HASH_PEPPER` environment variable to password for better security.
+   * @param {string} [password]
+   * @param {string} [salt]
+   * @return {*}  {String}
+   * @memberof PasswordUtilsService
+   */
+  async hashPassword(password: string, salt: string): Promise<string> {
+    return await this.hashContent(
+      password + this.configService.get<string>('HASH_PEPPER'),
+      salt,
+    );
+  }
+
+  /**
    * Method that checks whether provided password matches user password from database.
-   * Uses `bcrypt.compare()` method that returns true when two passwords match.
-   * Also, adds `HASH_PEPPER` environment variable to password.
+   * Adds `HASH_PEPPER` environment variable to password.
    * @param {string} [providedPassword]
    * @param {string} [userPassword]
    * @return {Boolean}  {Boolean}
@@ -44,26 +72,9 @@ export class PasswordUtilsService {
     providedPassword: string,
     userPassword: string,
   ): Promise<boolean> {
-    return await bcrypt.compare(
+    return await this.compareContent(
       providedPassword + this.configService.get<string>('HASH_PEPPER'),
       userPassword,
     );
-  }
-
-  /**
-   * Method that hashes the content specified amount of times.
-   * Uses `bcrypt.hash()` method that returns hashed content as string.
-   * @param {string} [content]
-   * @param {number} [rounds]
-   * @return {string}  {String}
-   * @memberof PasswordUtilsService
-   */
-  async hashContent(
-    content: string,
-    rounds: number,
-  ): Promise<string> {
-    const hashedContent = await bcrypt.hash(content, rounds);
-
-    return hashedContent;
   }
 }

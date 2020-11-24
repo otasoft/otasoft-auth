@@ -1,32 +1,39 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
-import { AuthConfirmationDto, ChangePasswordDto } from '../dto';
-import { GetUserIdDto } from '../dto/get-user-id.dto';
+import { AuthConfirmationDto, ChangePasswordDto, GetRefreshUserIdDto, GetUserIdDto} from '../dto';
+import { AuthIdModel, StringResponse } from '../models';
 import { UserService } from '../services/user.service';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @MessagePattern({ role: 'auth', cmd: 'getId' })
-  async getUserId(getUserIdDto: GetUserIdDto): Promise<{ auth_id: number }> {
+  @MessagePattern({ role: 'user', cmd: 'getId' })
+  async getUserId(getUserIdDto: GetUserIdDto): Promise<AuthIdModel> {
     return this.userService.getUserId(getUserIdDto);
   }
 
-  @MessagePattern({ role: 'auth', cmd: 'changePassword' })
+  @MessagePattern({ role: 'user', cmd: 'getRefreshUserId' })
+  async getUserIdIfRefreshTokenMatches(
+    getRefreshUserIdDto: GetRefreshUserIdDto
+  ): Promise<AuthIdModel> {
+    return this.userService.getUserIdIfRefreshTokenMatches(getRefreshUserIdDto);
+  }
+
+  @MessagePattern({ role: 'user', cmd: 'changePassword' })
   async changeUserPassword(
     changePasswordDto: ChangePasswordDto,
-  ): Promise<{ response: string }> {
+  ): Promise<StringResponse> {
     return this.userService.changeUserPassword(changePasswordDto);
   }
 
-  @MessagePattern({ role: 'auth', cmd: 'deleteAccount' })
-  async deleteUserAccount(id: number): Promise<{ response: string }> {
+  @MessagePattern({ role: 'user', cmd: 'deleteAccount' })
+  async deleteUserAccount(id: number): Promise<StringResponse> {
     return this.userService.deleteUserAccount(id);
   }
 
-  @MessagePattern({ role: 'auth', cmd: 'confirm' })
+  @MessagePattern({ role: 'user', cmd: 'confirmAccount' })
   async confirmAccountCreation(
     authConfirmationDto: AuthConfirmationDto,
   ): Promise<void> {

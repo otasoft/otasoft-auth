@@ -7,9 +7,10 @@ import {
   ConfirmAccountCreationCommand,
   DeleteUserAccountCommand,
 } from '../commands/impl';
-import { AuthConfirmationDto, ChangePasswordDto, GetUserIdDto } from '../dto';
+import { AuthConfirmationDto, ChangePasswordDto, GetRefreshUserIdDto, GetUserIdDto } from '../dto';
 import { IConfirmedAccountObject } from '../interfaces';
-import { GetConfirmedUserQuery, GetUserIdQuery } from '../queries/impl';
+import { AuthIdModel, StringResponse } from '../models';
+import { GetConfirmedUserQuery, GetRefreshUserIdQuery, GetUserIdQuery } from '../queries/impl';
 
 @Injectable()
 export class UserService {
@@ -19,19 +20,27 @@ export class UserService {
     private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
-  async getUserId(getUserIdDto: GetUserIdDto): Promise<{ auth_id: number }> {
+  async getUserId(getUserIdDto: GetUserIdDto): Promise<AuthIdModel> {
     return this.queryBus.execute(new GetUserIdQuery(getUserIdDto));
+  }
+
+  async getUserIdIfRefreshTokenMatches(
+    getRefreshUserIdDto: GetRefreshUserIdDto
+  ): Promise<AuthIdModel> {
+    return this.queryBus.execute(
+      new GetRefreshUserIdQuery(getRefreshUserIdDto)
+    );
   }
 
   async changeUserPassword(
     changePasswordDto: ChangePasswordDto,
-  ): Promise<{ response: string }> {
+  ): Promise<StringResponse> {
     return this.commandBus.execute(
       new ChangeUserPasswordCommand(changePasswordDto),
     );
   }
 
-  async deleteUserAccount(id: number): Promise<{ response: string }> {
+  async deleteUserAccount(id: number): Promise<StringResponse> {
     return this.commandBus.execute(new DeleteUserAccountCommand(id));
   }
 
