@@ -1,3 +1,3 @@
 export class GetUserIdDto {
-  payload: string;
+  payloadUserId: number;
 }

@@ -1,10 +1,21 @@
-import { Controller } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { UserEntity } from 'src/db/entities';
 
-import { AuthConfirmationDto, ChangePasswordDto, GetRefreshUserIdDto, GetUserIdDto} from '../dto';
+import {
+  AuthConfirmationDto,
+  ChangePasswordDto,
+  GetRefreshUserDto,
+  GetUserIdDto,
+} from '../dto';
 import { AuthIdModel, StringResponse } from '../models';
 import { UserService } from '../services/user.service';
 
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -14,11 +25,17 @@ export class UserController {
     return this.userService.getUserId(getUserIdDto);
   }
 
-  @MessagePattern({ role: 'user', cmd: 'getRefreshUserId' })
-  async getUserIdIfRefreshTokenMatches(
-    getRefreshUserIdDto: GetRefreshUserIdDto
-  ): Promise<AuthIdModel> {
-    return this.userService.getUserIdIfRefreshTokenMatches(getRefreshUserIdDto);
+  @UseInterceptors(ClassSerializerInterceptor)
+  @MessagePattern({ role: 'user', cmd: 'getUserById' })
+  async getUserById(id: number): Promise<UserEntity> {
+    return this.userService.getUserById(id);
+  }
+
+  @MessagePattern({ role: 'user', cmd: 'getUserIfRefreshTokenMatches' })
+  async getUserIfRefreshTokenMatches(
+    getRefreshUserIdDto: GetRefreshUserDto,
+  ): Promise<UserEntity> {
+    return this.userService.getUserIfRefreshTokenMatches(getRefreshUserIdDto);
   }
 
   @MessagePattern({ role: 'user', cmd: 'changePassword' })
@@ -41,9 +58,7 @@ export class UserController {
   }
 
   @MessagePattern({ role: 'user', cmd: 'removeRefreshToken' })
-  async removeRefreshToken(
-    userId: number
-  ): Promise<void> {
+  async removeRefreshToken(userId: number): Promise<void> {
     return this.userService.removeRefreshToken(userId);
   }
 }

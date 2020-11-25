@@ -15,7 +15,7 @@ export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
 
   async execute(query: GetUserIdQuery) {
     const user = await this.userRepository.findOne({
-      where: { jwt_payload: query.getUserIdDto.payload },
+      where: { jwt_payload: query.getUserIdDto.payloadUserId },
     });
 
     if (!user) this.rpcExceptionService.throwNotFound('User does not exist');

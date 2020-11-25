@@ -25,14 +25,14 @@ export class ChangeUserPasswordHandler
 
     if (
       await this.passwordUtilsService.validatePassword(
-        command.changePasswordDto.changePasswordDto.old_password,
+        command.changePasswordDto.changePasswordData.old_password,
         user.password,
       )
     ) {
       try {
         const salt = await this.passwordUtilsService.generateSalt();
         user.password = await this.passwordUtilsService.hashPassword(
-          command.changePasswordDto.changePasswordDto.new_password,
+          command.changePasswordDto.changePasswordData.new_password,
           salt,
         );
         await this.userRepository.save(user);

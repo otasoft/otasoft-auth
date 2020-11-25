@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { UserEntity } from 'src/db/entities';
 
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import {
@@ -8,10 +9,21 @@ import {
   DeleteUserAccountCommand,
   RemoveRefreshTokenCommand,
 } from '../commands/impl';
-import { AuthConfirmationDto, ChangePasswordDto, GetRefreshUserIdDto, GetUserIdDto } from '../dto';
+import {
+  AuthConfirmationDto,
+  ChangePasswordDto,
+  GetRefreshUserDto,
+  GetUserIdDto,
+} from '../dto';
 import { IConfirmedAccountObject } from '../interfaces';
 import { AuthIdModel, StringResponse } from '../models';
-import { GetConfirmedUserQuery, GetRefreshUserIdQuery, GetUserIdQuery } from '../queries/impl';
+import {
+  GetConfirmedUserQuery,
+  GetRefreshUserQuery,
+  GetUserByEmailQuery,
+  GetUserByIdQuery,
+  GetUserIdQuery,
+} from '../queries/impl';
 
 @Injectable()
 export class UserService {
@@ -25,12 +37,18 @@ export class UserService {
     return this.queryBus.execute(new GetUserIdQuery(getUserIdDto));
   }
 
-  async getUserIdIfRefreshTokenMatches(
-    getRefreshUserIdDto: GetRefreshUserIdDto
-  ): Promise<AuthIdModel> {
-    return this.queryBus.execute(
-      new GetRefreshUserIdQuery(getRefreshUserIdDto)
-    );
+  async getUserIfRefreshTokenMatches(
+    getRefreshUserIdDto: GetRefreshUserDto,
+  ): Promise<UserEntity> {
+    return this.queryBus.execute(new GetRefreshUserQuery(getRefreshUserIdDto));
+  }
+
+  async getUserById(id: number): Promise<UserEntity> {
+    return this.queryBus.execute(new GetUserByIdQuery(id));
+  }
+
+  async getUserByEmail(email: string): Promise<UserEntity> {
+    return this.queryBus.execute(new GetUserByEmailQuery(email));
   }
 
   async changeUserPassword(
@@ -59,9 +77,7 @@ export class UserService {
     );
   }
 
-  async removeRefreshToken(
-    userId: number
-  ): Promise<void> {
+  async removeRefreshToken(userId: number): Promise<void> {
     return await this.commandBus.execute(new RemoveRefreshTokenCommand(userId));
   }
 }

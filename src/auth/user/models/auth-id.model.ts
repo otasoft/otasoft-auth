@@ -1,3 +1,3 @@
 export class AuthIdModel {
-    auth_id: number;
+  auth_id: number;
 }
