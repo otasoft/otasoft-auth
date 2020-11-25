@@ -25,6 +25,6 @@ import { LogRepository, UserRepository } from './repositories';
     }),
     TypeOrmModule.forFeature([LogRepository]),
   ],
-  providers: [UserSubscriber],
+  // providers: [UserSubscriber],
 })
 export class DbModule {}

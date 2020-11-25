@@ -39,4 +39,11 @@ export class UserController {
   ): Promise<void> {
     return this.userService.confirmAccountCreation(authConfirmationDto);
   }
+
+  @MessagePattern({ role: 'user', cmd: 'removeRefreshToken' })
+  async removeRefreshToken(
+    userId: number
+  ): Promise<void> {
+    return this.userService.removeRefreshToken(userId);
+  }
 }

@@ -6,6 +6,7 @@ import {
   ChangeUserPasswordCommand,
   ConfirmAccountCreationCommand,
   DeleteUserAccountCommand,
+  RemoveRefreshTokenCommand,
 } from '../commands/impl';
 import { AuthConfirmationDto, ChangePasswordDto, GetRefreshUserIdDto, GetUserIdDto } from '../dto';
 import { IConfirmedAccountObject } from '../interfaces';
@@ -56,5 +57,11 @@ export class UserService {
     await this.commandBus.execute(
       new ConfirmAccountCreationCommand(accountConfirmObject),
     );
+  }
+
+  async removeRefreshToken(
+    userId: number
+  ): Promise<void> {
+    return await this.commandBus.execute(new RemoveRefreshTokenCommand(userId));
   }
 }

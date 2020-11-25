@@ -48,4 +48,8 @@ export class AuthorizationService {
   async setRefreshToken(refreshToken: string, userId: number) {
     return await this.commandBus.execute(new SetRefreshTokenCommand(refreshToken, userId));
   }
+
+  getCookieWithJwtAccessToken(id: number): string {
+    return this.jwtTokenService.getCookieWithJwtAccessToken(id);
+  }
 }

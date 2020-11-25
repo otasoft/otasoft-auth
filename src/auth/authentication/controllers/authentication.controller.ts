@@ -21,7 +21,7 @@ export class AuthenticationController {
   }
 
   @MessagePattern({ role: 'auth', cmd: 'logout' })
-  async logout(): Promise<{ response: string }> {
-    return this.authenticationService.logout();
+  async logout(userId: number): Promise<string[]> {
+    return this.authenticationService.logout(userId);
   }
 }

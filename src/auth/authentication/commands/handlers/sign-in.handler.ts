@@ -38,16 +38,12 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
         user.jwt_payload = jwtPayload;
         user.save();
 
-        const cookie = this.jwtTokenService.createCookieWithJwtToken(
-          jwtPayload,
-        );
-
         const accessTokenCookie = this.jwtTokenService.getCookieWithJwtAccessToken(user.id);
         const refreshTokenCookie = this.jwtTokenService.getCookieWithJwtRefreshToken(user.id);
      
         await this.authorizationService.setRefreshToken(refreshTokenCookie.token, user.id);
 
-        return [accessTokenCookie, refreshTokenCookie];
+        return [accessTokenCookie, refreshTokenCookie.cookie];
       } catch (error) {
         this.rpcExceptionService.throwUnauthorised('Cannot sign in');
       }

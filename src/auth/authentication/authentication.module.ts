@@ -10,6 +10,7 @@ import { UserRepository } from '../../db/repositories';
 import { CommandHandlers } from './commands/handlers';
 import { PasswordUtilsService } from '../../utils/password-utils';
 import { AuthorizationService } from '../authorization/services/authorization.service';
+import { UserService } from '../user/services/user.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
@@ -20,7 +21,8 @@ import { AuthorizationService } from '../authorization/services/authorization.se
     ConfigService,
     PasswordUtilsService,
     ...CommandHandlers,
-    AuthorizationService
+    AuthorizationService,
+    UserService,
   ],
 })
 export class AuthenticationModule {}
