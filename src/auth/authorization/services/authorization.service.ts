@@ -7,6 +7,9 @@ import { GetUserIdQuery } from '../../user/queries/impl/get-user-id.query';
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import { JwtTokenService } from '../../passport-jwt/services';
 import { SetRefreshTokenCommand } from '../commands/impl';
+import { AuthCredentialsDto } from 'src/auth/authentication/dto';
+import { UserService } from '../../user/services/user.service';
+import { PasswordUtilsService } from '../../../utils/password-utils';
 
 @Injectable()
 export class AuthorizationService {
@@ -15,6 +18,8 @@ export class AuthorizationService {
     private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly jwtTokenService: JwtTokenService,
+    private readonly userService: UserService,
+    private readonly passwordUtilsService: PasswordUtilsService,
   ) {}
 
   async checkAccessControl(
@@ -22,34 +27,41 @@ export class AuthorizationService {
   ): Promise<boolean> {
     const { jwt, id } = accessControlDto;
 
-    const jwtTokenPayload: IJwtPayload = await this.validateToken({ jwt });
-
-    const isTokenValidated = Boolean(jwtTokenPayload);
-
-    if (!jwtTokenPayload.exp && !isTokenValidated)
-      this.rpcExceptionService.throwUnauthorised(
-        'Token has expired, please sign in',
-      );
-
-    const authObject = await this.queryBus.execute(
-      new GetUserIdQuery({ payload: jwtTokenPayload.jwt_payload }),
+    const jwtTokenPayload: IJwtPayload = await this.jwtTokenService.validateToken(
+      { jwt },
     );
 
-    if (authObject.auth_id !== id)
+    if (jwtTokenPayload.userId !== id)
       this.rpcExceptionService.throwForbidden('Forbidden resource');
 
-    return isTokenValidated && authObject.auth_id === id;
-  }
-
-  validateToken(jwtDataObject: JwtAuthDto) {
-    return this.jwtTokenService.validateToken(jwtDataObject);
+    return true;
   }
 
   async setRefreshToken(refreshToken: string, userId: number) {
-    return await this.commandBus.execute(new SetRefreshTokenCommand(refreshToken, userId));
+    return await this.commandBus.execute(
+      new SetRefreshTokenCommand(refreshToken, userId),
+    );
   }
 
   getCookieWithJwtAccessToken(id: number): string {
     return this.jwtTokenService.getCookieWithJwtAccessToken(id);
+  }
+
+  async getAuthenticatedUser(authCredentialsDto: AuthCredentialsDto) {
+    const user = await this.userService.getUserByEmail(
+      authCredentialsDto.email,
+    );
+
+    if (!user) this.rpcExceptionService.throwNotFound('User not found');
+
+    const isPasswordValidated = await this.passwordUtilsService.validatePassword(
+      authCredentialsDto.password,
+      user.password,
+    );
+
+    if (!isPasswordValidated)
+      this.rpcExceptionService.throwUnauthorised('Password do not match');
+
+    return user;
   }
 }
