@@ -40,7 +40,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   }
 
   async beforeUpdate(event: UpdateEvent<UserEntity>) {
-    console.log('beforeUpdate', event.entity)
+    console.log('beforeUpdate', event.entity);
     const newLog = this.logRepository.create({
       entity_name: 'user',
       event_name: 'before_update',
@@ -57,7 +57,7 @@ export class UserSubscriber implements EntitySubscriberInterface<UserEntity> {
   }
 
   async afterUpdate(event: UpdateEvent<UserEntity>) {
-    console.log('afterUpdate', event.entity)
+    console.log('afterUpdate', event.entity);
     const newLog = this.logRepository.create({
       entity_name: 'user',
       event_name: 'after_update',

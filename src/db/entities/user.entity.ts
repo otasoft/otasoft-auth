@@ -25,8 +25,10 @@ export class UserEntity extends BaseEntity {
   hashedRefreshToken?: string;
 
   @Column()
+  @Exclude()
   jwt_payload: string;
 
   @Column()
+  @Exclude()
   is_confirmed: boolean;
 }
