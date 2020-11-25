@@ -1,4 +1,8 @@
-import { Controller } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
 import { AuthenticationService } from '../services/authentication.service';
@@ -13,10 +17,9 @@ export class AuthenticationController {
     return this.authenticationService.signUp(authCredentialsDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @MessagePattern({ role: 'auth', cmd: 'login' })
-  async signIn(
-    authCredentialsDto: AuthCredentialsDto,
-  ): Promise<string[]> {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string[]> {
     return this.authenticationService.signIn(authCredentialsDto);
   }
 

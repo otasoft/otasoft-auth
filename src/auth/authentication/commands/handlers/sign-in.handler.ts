@@ -20,7 +20,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     private readonly authorizationService: AuthorizationService,
   ) {}
 
-  async execute(command: SignInCommand) {
+  async execute(command: SignInCommand): Promise<string[]> {
     const user = await this.userRepository.findOne({
       email: command.authCredentials.email,
     });
@@ -38,10 +38,17 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
         user.jwt_payload = jwtPayload;
         user.save();
 
-        const accessTokenCookie = this.jwtTokenService.getCookieWithJwtAccessToken(user.id);
-        const refreshTokenCookie = this.jwtTokenService.getCookieWithJwtRefreshToken(user.id);
-     
-        await this.authorizationService.setRefreshToken(refreshTokenCookie.token, user.id);
+        const accessTokenCookie = this.jwtTokenService.getCookieWithJwtAccessToken(
+          user.id,
+        );
+        const refreshTokenCookie = this.jwtTokenService.getCookieWithJwtRefreshToken(
+          user.id,
+        );
+
+        await this.authorizationService.setRefreshToken(
+          refreshTokenCookie.token,
+          user.id,
+        );
 
         return [accessTokenCookie, refreshTokenCookie.cookie];
       } catch (error) {

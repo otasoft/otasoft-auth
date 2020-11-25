@@ -21,7 +21,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
 
   async execute(command: SignUpCommand) {
     const salt = await this.passwordUtilsService.generateSalt();
-    const user = await this.userRepository.create();
+    const user = this.userRepository.create();
     user.email = command.authCredentials.email;
     user.password = await this.passwordUtilsService.hashPassword(
       command.authCredentials.password,
@@ -42,7 +42,9 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
         token: token,
       };
     } catch (error) {
-      const errorObject = this.errorValidationService.validateDbError(error);
+      const errorObject = this.errorValidationService.validateDbError(
+        error.code,
+      );
 
       this.rpcExceptionService.throwCatchedException(errorObject);
     }
