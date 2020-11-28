@@ -7,6 +7,7 @@ import { UserRepository } from '../../../../db/repositories';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { JwtTokenService } from '../../../passport-jwt/services';
+import { UserWithCookiesModel } from '../../models';
 import { AuthorizationService } from '../../../../auth/authorization/services/authorization.service';
 
 @CommandHandler(SignInCommand)
@@ -20,7 +21,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     private readonly authorizationService: AuthorizationService,
   ) {}
 
-  async execute(command: SignInCommand): Promise<string[]> {
+  async execute(command: SignInCommand): Promise<UserWithCookiesModel> {
     const user = await this.userRepository.findOne({
       email: command.authCredentials.email,
     });
@@ -50,7 +51,10 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
           user.id,
         );
 
-        return [accessTokenCookie, refreshTokenCookie.cookie];
+        return { 
+          cookies: [accessTokenCookie, refreshTokenCookie.cookie], 
+          user: { email: user.email, id: user.id }
+        };
       } catch (error) {
         this.rpcExceptionService.throwUnauthorised('Cannot sign in');
       }

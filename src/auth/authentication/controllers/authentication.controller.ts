@@ -7,6 +7,7 @@ import { MessagePattern } from '@nestjs/microservices';
 
 import { AuthenticationService } from '../services/authentication.service';
 import { AuthCredentialsDto } from '../dto';
+import { UserWithCookiesModel } from '../models';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -19,7 +20,7 @@ export class AuthenticationController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @MessagePattern({ role: 'auth', cmd: 'login' })
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string[]> {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<UserWithCookiesModel> {
     return this.authenticationService.signIn(authCredentialsDto);
   }
 

@@ -5,6 +5,7 @@ import { AuthCredentialsDto } from '../dto';
 import { SignUpCommand, SignInCommand } from '../commands/impl';
 import { UserService } from 'src/auth/user/services/user.service';
 import { JwtTokenService } from 'src/auth/passport-jwt/services';
+import { UserWithCookiesModel } from '../models';
 
 @Injectable()
 export class AuthenticationService {
@@ -18,7 +19,7 @@ export class AuthenticationService {
     return this.commandBus.execute(new SignUpCommand(authCredentialsDto));
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string[]> {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<UserWithCookiesModel> {
     return this.commandBus.execute(new SignInCommand(authCredentialsDto));
   }
 
