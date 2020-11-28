@@ -1,4 +1,4 @@
 export class IAuthUser {
-    email: string;
-    id: number;
+  email: string;
+  id: number;
 }

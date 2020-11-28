@@ -1,6 +1,6 @@
-import { IAuthUser } from "../interfaces"
+import { IAuthUser } from '../interfaces';
 
 export class UserWithCookiesModel {
-    cookies: string[];
-    user: IAuthUser;
+  cookies: string[];
+  user: IAuthUser;
 }

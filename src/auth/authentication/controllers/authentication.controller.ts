@@ -20,7 +20,9 @@ export class AuthenticationController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @MessagePattern({ role: 'auth', cmd: 'login' })
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<UserWithCookiesModel> {
+  async signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<UserWithCookiesModel> {
     return this.authenticationService.signIn(authCredentialsDto);
   }
 

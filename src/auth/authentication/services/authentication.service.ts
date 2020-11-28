@@ -19,7 +19,9 @@ export class AuthenticationService {
     return this.commandBus.execute(new SignUpCommand(authCredentialsDto));
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<UserWithCookiesModel> {
+  async signIn(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<UserWithCookiesModel> {
     return this.commandBus.execute(new SignInCommand(authCredentialsDto));
   }
 

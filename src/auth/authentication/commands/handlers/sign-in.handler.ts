@@ -51,9 +51,9 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
           user.id,
         );
 
-        return { 
-          cookies: [accessTokenCookie, refreshTokenCookie.cookie], 
-          user: { email: user.email, id: user.id }
+        return {
+          cookies: [accessTokenCookie, refreshTokenCookie.cookie],
+          user: { email: user.email, id: user.id },
         };
       } catch (error) {
         this.rpcExceptionService.throwUnauthorised('Cannot sign in');

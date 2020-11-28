@@ -34,7 +34,7 @@ export class PasswordUtilsService {
   ): Promise<boolean> {
     return await bcrypt.compare(providedContent, userContent);
   }
-  
+
   /**
    * Method that generates `salt` that can be added to the password when signing up.
    * Uses `bcrypt.genSalt()` method and returns a string salt.
