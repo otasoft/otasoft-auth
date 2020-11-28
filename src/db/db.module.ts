@@ -1,7 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { LogEntity, UserEntity } from './entities';
+import { UserSubscriber } from './subscribers';
+import { LogRepository, UserRepository } from './repositories';
+
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
@@ -15,9 +20,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DATABASE'),
         synchronize: true,
-        autoLoadEntities: true,
+        entities: [UserEntity, LogEntity],
       }),
     }),
+    TypeOrmModule.forFeature([LogRepository]),
   ],
+  // providers: [UserSubscriber],
 })
 export class DbModule {}
