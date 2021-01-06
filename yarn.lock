@@ -611,10 +611,10 @@
     "@types/jsonwebtoken" "8.5.0"
     jsonwebtoken "8.5.1"
 
-"@nestjs/microservices@^7.5.5":
-  version "7.5.5"
-  resolved "https://registry.yarnpkg.com/@nestjs/microservices/-/microservices-7.5.5.tgz#e6e3b3c252ba34dd89bfece14bd64538e16d8985"
-  integrity sha512-8sPOO3gn6JJjOwHpheTcwCTZU1RwdudkGElg9dN4XWGcDJQ7j5nA/ZHUkRuAR5lhLVWGD8xlfeFy38SIkEHe0g==
+"@nestjs/microservices@^7.6.1":
+  version "7.6.5"
+  resolved "https://registry.yarnpkg.com/@nestjs/microservices/-/microservices-7.6.5.tgz#b1faed4ad7ded0801384ece5ab0c53431d1885ad"
+  integrity sha512-QW8V/JC2mgl0GAl09d8BYqiWpZYOMT4zzEMY4V2P/IZH6t/A4R8Wnds4fMRagikzRznVXxB0wmAV6uKxrj19Ww==
   dependencies:
     iterare "1.2.1"
     json-socket "0.3.0"
