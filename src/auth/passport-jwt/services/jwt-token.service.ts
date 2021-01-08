@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { RpcExceptionService } from 'src/utils/exception-handling';
 
-import { JwtAuthDto } from '../../authorization/dto';
+import { RpcExceptionService } from '../../../utils/exception-handling';
+import { IJwtObject } from '../interfaces';
 
 @Injectable()
 export class JwtTokenService {
@@ -20,7 +20,7 @@ export class JwtTokenService {
    * @return {*}  {verified value | false}
    * @memberof JwtTokenService
    */
-  async validateToken(jwtDataObject: JwtAuthDto) {
+  async validateToken(jwtDataObject: IJwtObject) {
     const { jwt } = jwtDataObject;
 
     try {

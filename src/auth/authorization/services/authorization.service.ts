@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CommandBus } from '@nestjs/cqrs';
 
-import { AccessControlDto, JwtAuthDto } from '../dto';
+import { AccessControlDto } from '../dto';
 import { IJwtPayload } from '../../passport-jwt/interfaces';
-import { GetUserIdQuery } from '../../user/queries/impl/get-user-id.query';
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import { JwtTokenService } from '../../passport-jwt/services';
 import { SetRefreshTokenCommand } from '../commands/impl';
-import { AuthCredentialsDto } from 'src/auth/authentication/dto';
+import { AuthCredentialsDto } from '../../authentication/dto';
 import { UserService } from '../../user/services/user.service';
 import { PasswordUtilsService } from '../../../utils/password-utils';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
-    private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly jwtTokenService: JwtTokenService,

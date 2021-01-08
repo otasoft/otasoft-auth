@@ -4,8 +4,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { UserEntity } from 'src/db/entities';
 
+import { UserEntity } from '../../../db/entities';
 import {
   AuthConfirmationDto,
   ChangePasswordDto,
