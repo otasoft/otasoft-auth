@@ -17,7 +17,7 @@ describe('AuthenticationController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CqrsModule],
       controllers: [AuthenticationController],
-      providers:[
+      providers: [
         AuthenticationService,
         UserService,
         JwtTokenService,
@@ -30,7 +30,7 @@ describe('AuthenticationController', () => {
           provide: ConfigService,
           useValue: mockedConfigService,
         },
-      ]
+      ],
     }).compile();
 
     controller = module.get<AuthenticationController>(AuthenticationController);

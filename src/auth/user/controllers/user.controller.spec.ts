@@ -12,7 +12,7 @@ describe('UserController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [CqrsModule],
       controllers: [UserController],
-      providers: [UserService, RpcExceptionService]
+      providers: [UserService, RpcExceptionService],
     }).compile();
 
     controller = module.get<UserController>(UserController);

@@ -1,4 +1,4 @@
 export const mockedJwtService = {
-    sign: () => '',
-    verify: () => true
-}
+  sign: () => '',
+  verify: () => true,
+};
