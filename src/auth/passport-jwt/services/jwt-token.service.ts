@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { RpcExceptionService } from 'src/utils/exception-handling';
+import { RpcExceptionService } from '../../../utils/exception-handling';
 
 import { JwtAuthDto } from '../../authorization/dto';
 

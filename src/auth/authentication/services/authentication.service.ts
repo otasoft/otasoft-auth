@@ -3,8 +3,8 @@ import { CommandBus } from '@nestjs/cqrs';
 
 import { AuthCredentialsDto } from '../dto';
 import { SignUpCommand, SignInCommand } from '../commands/impl';
-import { UserService } from 'src/auth/user/services/user.service';
-import { JwtTokenService } from 'src/auth/passport-jwt/services';
+import { UserService } from '../../user/services/user.service';
+import { JwtTokenService } from '../../passport-jwt/services';
 import { UserWithCookiesModel } from '../models';
 
 @Injectable()
