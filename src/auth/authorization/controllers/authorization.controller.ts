@@ -4,10 +4,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { UserEntity } from 'src/db/entities';
 
+import { UserEntity } from '../../../db/entities';
 import { AuthCredentialsDto } from '../../authentication/dto';
-import { AccessControlDto, JwtAuthDto } from '../dto';
+import { AccessControlDto } from '../dto';
 import { AuthorizationService } from '../services/authorization.service';
 
 @Controller('authorization')

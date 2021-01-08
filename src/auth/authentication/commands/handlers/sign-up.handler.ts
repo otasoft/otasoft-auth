@@ -7,7 +7,7 @@ import { UserRepository } from '../../../../db/repositories';
 import { SignUpCommand } from '../impl';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
-import { ErrorValidationService } from 'src/utils/error-validation';
+import { ErrorValidationService } from '../../../../utils/error-validation';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
