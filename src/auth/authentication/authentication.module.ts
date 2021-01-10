@@ -13,7 +13,11 @@ import { UserService } from '../user/services/user.service';
 import { PassportJwtModule } from '../passport-jwt/passport-jwt.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule, PassportJwtModule],
+  imports: [
+    TypeOrmModule.forFeature([UserRepository]),
+    CqrsModule,
+    PassportJwtModule,
+  ],
   controllers: [AuthenticationController],
   providers: [
     AuthenticationService,

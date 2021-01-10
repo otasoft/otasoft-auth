@@ -33,8 +33,11 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
 
     try {
       await user.save();
-      const token = this.jwtTokenService.signWithSecret({ userId: user.id, userEmail: user.email }, { expiresIn: '2d' })
-      
+      const token = this.jwtTokenService.signWithSecret(
+        { userId: user.id, userEmail: user.email },
+        { expiresIn: '2d' },
+      );
+
       return {
         auth_id: user.id,
         token: token,

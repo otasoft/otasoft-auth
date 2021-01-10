@@ -48,11 +48,12 @@ export class JwtTokenService {
    * @return {string} `token`
    * @memberof JwtTokenService
    */
-  signWithSecret(
-    payload: string | object,
-    options: jwt.SignOptions
-  ): string {
-    return jwt.sign(payload, this.configService.get<string>('EMAIL_SECRET'), options);
+  signWithSecret(payload: string | object, options: jwt.SignOptions): string {
+    return jwt.sign(
+      payload,
+      this.configService.get<string>('EMAIL_SECRET'),
+      options,
+    );
   }
 
   public getCookieWithJwtAccessToken(userId: number) {

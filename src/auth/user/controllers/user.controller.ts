@@ -13,7 +13,11 @@ import {
   GetRefreshUserDto,
   GetUserIdDto,
 } from '../dto';
-import { AuthIdModel, ForgotPasswordTokenModel, StringResponse } from '../models';
+import {
+  AuthIdModel,
+  ForgotPasswordTokenModel,
+  StringResponse,
+} from '../models';
 import { UserService } from '../services/user.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -64,7 +68,9 @@ export class UserController {
   }
 
   @MessagePattern({ role: 'user', cmd: 'forgot-password' })
-  async forgotPassword(authEmailDto: AuthEmailDto): Promise<ForgotPasswordTokenModel> {
+  async forgotPassword(
+    authEmailDto: AuthEmailDto,
+  ): Promise<ForgotPasswordTokenModel> {
     return this.userService.forgotPassword(authEmailDto);
   }
 }

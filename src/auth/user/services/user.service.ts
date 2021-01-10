@@ -18,7 +18,11 @@ import {
   GetUserIdDto,
 } from '../dto';
 import { IConfirmedAccountObject } from '../interfaces';
-import { AuthIdModel, ForgotPasswordTokenModel, StringResponse } from '../models';
+import {
+  AuthIdModel,
+  ForgotPasswordTokenModel,
+  StringResponse,
+} from '../models';
 import {
   GetConfirmedUserQuery,
   GetRefreshUserQuery,
@@ -86,12 +90,16 @@ export class UserService {
   async forgotPassword(
     authEmailDto: AuthEmailDto,
   ): Promise<ForgotPasswordTokenModel> {
-    const user: UserEntity = await this.queryBus.execute(new GetUserByEmailQuery(authEmailDto.email))
+    const user: UserEntity = await this.queryBus.execute(
+      new GetUserByEmailQuery(authEmailDto.email),
+    );
 
-    if (!user) return
+    if (!user) return;
 
-   const token = await this.commandBus.execute(new GenerateForgotPasswordTokenCommand(user.id, user.email)) 
+    const token = await this.commandBus.execute(
+      new GenerateForgotPasswordTokenCommand(user.id, user.email),
+    );
 
-   return token;
+    return token;
   }
 }

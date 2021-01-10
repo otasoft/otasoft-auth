@@ -13,7 +13,12 @@ import { PassportJwtModule } from '../passport-jwt/passport-jwt.module';
 import { UtilsModule } from '../../utils/utils.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule, PassportJwtModule, UtilsModule],
+  imports: [
+    TypeOrmModule.forFeature([UserRepository]),
+    CqrsModule,
+    PassportJwtModule,
+    UtilsModule,
+  ],
   controllers: [UserController],
   providers: [
     UserService,
