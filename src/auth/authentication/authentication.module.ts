@@ -10,9 +10,10 @@ import { CommandHandlers } from './commands/handlers';
 import { PasswordUtilsService } from '../../utils/password-utils';
 import { AuthorizationService } from '../authorization/services/authorization.service';
 import { UserService } from '../user/services/user.service';
+import { PassportJwtModule } from '../passport-jwt/passport-jwt.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule],
+  imports: [TypeOrmModule.forFeature([UserRepository]), CqrsModule, PassportJwtModule],
   controllers: [AuthenticationController],
   providers: [
     AuthenticationService,

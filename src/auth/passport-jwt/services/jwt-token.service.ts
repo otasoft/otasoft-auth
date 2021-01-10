@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import * as jwt from 'jsonwebtoken';
 
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import { IJwtObject } from '../interfaces';
@@ -37,6 +38,21 @@ export class JwtTokenService {
       }
       return false;
     }
+  }
+
+  /**
+   * Method that signes the provided payload with token
+   * Uses `jwt.sign()` method to sign the payload, adds secret, and set sign options (i.e. expiresIn value).
+   * @param {string | object} [payload]
+   * @param {jwt.SignOptions} [options]
+   * @return {string} `token`
+   * @memberof JwtTokenService
+   */
+  signWithSecret(
+    payload: string | object,
+    options: jwt.SignOptions
+  ): string {
+    return jwt.sign(payload, this.configService.get<string>('EMAIL_SECRET'), options);
   }
 
   public getCookieWithJwtAccessToken(userId: number) {
