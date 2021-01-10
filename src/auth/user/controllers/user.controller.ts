@@ -8,11 +8,12 @@ import { MessagePattern } from '@nestjs/microservices';
 import { UserEntity } from '../../../db/entities';
 import {
   AuthConfirmationDto,
+  AuthEmailDto,
   ChangePasswordDto,
   GetRefreshUserDto,
   GetUserIdDto,
 } from '../dto';
-import { AuthIdModel, StringResponse } from '../models';
+import { AuthIdModel, ForgotPasswordTokenModel, StringResponse } from '../models';
 import { UserService } from '../services/user.service';
 
 @UseInterceptors(ClassSerializerInterceptor)
@@ -60,5 +61,10 @@ export class UserController {
   @MessagePattern({ role: 'user', cmd: 'removeRefreshToken' })
   async removeRefreshToken(userId: number): Promise<void> {
     return this.userService.removeRefreshToken(userId);
+  }
+
+  @MessagePattern({ role: 'user', cmd: 'forgot-password' })
+  async forgotPassword(authEmailDto: AuthEmailDto): Promise<ForgotPasswordTokenModel> {
+    return this.userService.forgotPassword(authEmailDto);
   }
 }
