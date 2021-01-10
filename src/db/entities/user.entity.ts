@@ -31,4 +31,8 @@ export class UserEntity extends BaseEntity {
   @Column()
   @Exclude()
   is_confirmed: boolean;
+
+  @Column({ nullable: true })
+  @Exclude()
+  forgotPasswordToken?: string;
 }
