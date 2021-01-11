@@ -56,6 +56,18 @@ export class JwtTokenService {
     );
   }
 
+  /**
+   * Method that verifies the token
+   * Uses `jwt.verify()` method to verify the token and adds secret
+   * @param {string | object} [payload]
+   * @param {jwt.SignOptions} [options]
+   * @return {string} `token`
+   * @memberof JwtTokenService
+   */
+  verifyToken(token: string): any {
+    return jwt.verify(token, this.configService.get<string>('EMAIL_SECRET'));
+  }
+
   public getCookieWithJwtAccessToken(userId: number) {
     const payload = { userId };
 
