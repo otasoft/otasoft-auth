@@ -3,8 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { LogEntity, UserEntity } from './entities';
-import { UserSubscriber } from './subscribers';
-import { LogRepository, UserRepository } from './repositories';
+import { LogRepository } from './repositories';
 
 @Global()
 @Module({
@@ -25,6 +24,5 @@ import { LogRepository, UserRepository } from './repositories';
     }),
     TypeOrmModule.forFeature([LogRepository]),
   ],
-  // providers: [UserSubscriber],
 })
 export class DbModule {}
