@@ -12,8 +12,10 @@ import {
   ChangePasswordDto,
   GetRefreshUserDto,
   GetUserIdDto,
+  SetNewPasswordDto,
 } from '../dto';
 import {
+  AuthEmailModel,
   AuthIdModel,
   ForgotPasswordTokenModel,
   StringResponse,
@@ -72,5 +74,12 @@ export class UserController {
     authEmailDto: AuthEmailDto,
   ): Promise<ForgotPasswordTokenModel> {
     return this.userService.forgotPassword(authEmailDto);
+  }
+
+  @MessagePattern({ role: 'user', cmd: 'set-new-password' })
+  async setNewPassword(
+    setNewPasswordDto: SetNewPasswordDto,
+  ): Promise<AuthEmailModel> {
+    return this.userService.setNewPassword(setNewPasswordDto);
   }
 }
