@@ -1,6 +1,6 @@
 export interface IJwtPayload {
   userId: number;
-  userEmail: string;
+  userEmail?: string;
   iat?: number;
   exp?: number;
 }
