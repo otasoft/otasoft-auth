@@ -1,6 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
 import { UserRepository } from '../../../../db/repositories';
@@ -8,6 +7,7 @@ import { SignUpCommand } from '../impl';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { ErrorValidationService } from '../../../../utils/error-validation';
+import { JwtTokenService } from '../../../passport-jwt/services';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
@@ -17,6 +17,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly errorValidationService: ErrorValidationService,
+    private readonly jwtTokenService: JwtTokenService,
   ) {}
 
   async execute(command: SignUpCommand) {
@@ -32,11 +33,11 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
 
     try {
       await user.save();
-      const token = jwt.sign(
+      const token = this.jwtTokenService.signWithSecret(
         { userId: user.id, userEmail: user.email },
-        process.env.EMAIL_SECRET,
         { expiresIn: '2d' },
       );
+
       return {
         auth_id: user.id,
         token: token,

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { JwtTokenService } from '../../../auth/passport-jwt/services';
+import { IJwtPayload } from '../../../auth/passport-jwt/interfaces';
 import { UserEntity } from '../../../db/entities';
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import {
@@ -8,15 +10,24 @@ import {
   ConfirmAccountCreationCommand,
   DeleteUserAccountCommand,
   RemoveRefreshTokenCommand,
+  SetNewPasswordCommand,
 } from '../commands/impl';
+import { GenerateForgotPasswordTokenCommand } from '../commands/impl/generate-forgot-password-token.command';
 import {
   AuthConfirmationDto,
+  AuthEmailDto,
   ChangePasswordDto,
   GetRefreshUserDto,
   GetUserIdDto,
+  SetNewPasswordDto,
 } from '../dto';
 import { IConfirmedAccountObject } from '../interfaces';
-import { AuthIdModel, StringResponse } from '../models';
+import {
+  AuthEmailModel,
+  AuthIdModel,
+  ForgotPasswordTokenModel,
+  StringResponse,
+} from '../models';
 import {
   GetConfirmedUserQuery,
   GetRefreshUserQuery,
@@ -31,6 +42,7 @@ export class UserService {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
+    private readonly jwtTokenService: JwtTokenService,
   ) {}
 
   async getUserId(getUserIdDto: GetUserIdDto): Promise<AuthIdModel> {
@@ -79,5 +91,36 @@ export class UserService {
 
   async removeRefreshToken(userId: number): Promise<void> {
     return await this.commandBus.execute(new RemoveRefreshTokenCommand(userId));
+  }
+
+  async forgotPassword(
+    authEmailDto: AuthEmailDto,
+  ): Promise<ForgotPasswordTokenModel> {
+    const user: UserEntity = await this.queryBus.execute(
+      new GetUserByEmailQuery(authEmailDto.email),
+    );
+
+    if (!user) return;
+
+    const token = await this.commandBus.execute(
+      new GenerateForgotPasswordTokenCommand(user.id, user.email),
+    );
+
+    return token;
+  }
+
+  async setNewPassword(
+    setNewPasswordDto: SetNewPasswordDto,
+  ): Promise<AuthEmailModel> {
+    const payload: IJwtPayload = this.jwtTokenService.verifyToken(
+      setNewPasswordDto.forgotPasswordToken,
+    );
+
+    if (!payload.userEmail || !payload.userId)
+      this.rpcExceptionService.throwUnauthorised('Token expired or broken');
+
+    return await this.commandBus.execute(
+      new SetNewPasswordCommand(setNewPasswordDto.newPassword, payload.userId),
+    );
   }
 }
