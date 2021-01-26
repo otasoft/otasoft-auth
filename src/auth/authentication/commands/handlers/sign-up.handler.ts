@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
-import { UserRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { SignUpCommand } from '../impl';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
@@ -12,8 +12,8 @@ import { JwtTokenService } from '../../../passport-jwt/services';
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserWriteRepository)
+    private readonly userWriteRepository: UserWriteRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly errorValidationService: ErrorValidationService,
@@ -22,7 +22,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
 
   async execute(command: SignUpCommand) {
     const salt = await this.passwordUtilsService.generateSalt();
-    const user = this.userRepository.create();
+    const user = this.userWriteRepository.create();
     user.email = command.authCredentials.email;
     user.password = await this.passwordUtilsService.hashPassword(
       command.authCredentials.password,

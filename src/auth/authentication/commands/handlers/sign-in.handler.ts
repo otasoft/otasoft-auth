@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import { SignInCommand } from '../impl';
-import { UserRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { JwtTokenService } from '../../../passport-jwt/services';
@@ -13,8 +13,8 @@ import { AuthorizationService } from '../../../../auth/authorization/services/au
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserWriteRepository)
+    private readonly userWriteRepository: UserWriteRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly jwtTokenService: JwtTokenService,
@@ -22,7 +22,7 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
   ) {}
 
   async execute(command: SignInCommand): Promise<UserWithCookiesModel> {
-    const user = await this.userRepository.findOne({
+    const user = await this.userWriteRepository.findOne({
       email: command.authCredentials.email,
     });
 
