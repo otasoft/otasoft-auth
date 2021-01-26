@@ -2,20 +2,20 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { UserEntity } from '../../../../db/entities';
-import { UserRepository } from '../../../../db/repositories';
+import { UserReadRepository } from '../../../../db/repositories';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { GetUserByIdQuery } from '../impl';
 
 @QueryHandler(GetUserByIdQuery)
 export class GetUserByIdHandler implements IQueryHandler<GetUserByIdQuery> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserReadRepository)
+    private readonly userReadRepository: UserReadRepository,
     private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(query: GetUserByIdQuery): Promise<UserEntity> {
-    const user = await this.userRepository.findOne(query.id);
+    const user = await this.userReadRepository.findOne(query.id);
 
     if (!user)
       this.rpcExceptionService.throwNotFound(

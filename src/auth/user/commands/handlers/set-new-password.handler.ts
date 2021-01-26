@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { RpcExceptionService } from '../../../../utils/exception-handling';
-import { UserRepository, UserWriteRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { AuthEmailModel } from '../../models';
 import { SetNewPasswordCommand } from '../impl';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
