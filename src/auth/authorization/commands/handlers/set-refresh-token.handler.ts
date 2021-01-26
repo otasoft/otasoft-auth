@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { PasswordUtilsService } from '../../../../utils/password-utils';
-import { UserRepository, UserWriteRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { SetRefreshTokenCommand } from '../impl';
 
 @CommandHandler(SetRefreshTokenCommand)
