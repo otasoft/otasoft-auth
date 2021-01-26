@@ -1,19 +1,20 @@
 import { ConfirmAccountCreationCommand } from '../impl';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '../../../../db/repositories';
+
+import { UserWriteRepository } from '../../../../db/repositories';
 
 @CommandHandler(ConfirmAccountCreationCommand)
 export class ConfirmAccountCreationCommandHandler
   implements ICommandHandler<ConfirmAccountCreationCommand> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserWriteRepository)
+    private readonly userWriteRepository: UserWriteRepository,
   ) {}
 
   async execute(command: ConfirmAccountCreationCommand) {
     const { isAccountConfirmed, userId } = command.accountConfirmObject;
-    await this.userRepository.update(userId, {
+    await this.userWriteRepository.update(userId, {
       is_confirmed: isAccountConfirmed,
     });
   }

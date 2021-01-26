@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CommandHandlers } from './commands/handlers';
 import { QueryHandlers } from './queries/handlers';
-import { UserRepository } from '../../db/repositories';
+import { UserRepository, UserWriteRepository } from '../../db/repositories';
 import { PasswordUtilsService } from '../../utils/password-utils';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
@@ -14,7 +14,7 @@ import { UtilsModule } from '../../utils/utils.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([UserRepository, UserWriteRepository]),
     CqrsModule,
     PassportJwtModule,
     UtilsModule,
