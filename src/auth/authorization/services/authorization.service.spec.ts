@@ -4,24 +4,23 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { AuthorizationService } from './authorization.service';
-import { JwtTokenService } from '../../passport-jwt/services';
-import { UserService } from '../../user/services/user.service';
 import { RpcExceptionService } from '../../../utils/exception-handling';
-import { PasswordUtilsService } from '../../../utils/password-utils';
 import { mockedConfigService, mockedJwtService } from '../../../utils/mocks';
+import { TokenService } from './token.service';
+import { CookieService } from '../../authentication/services';
+import { UtilsModule } from '../../../utils/utils.module';
 
 describe('AuthorizationService', () => {
   let service: AuthorizationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CqrsModule],
+      imports: [CqrsModule, UtilsModule],
       providers: [
         AuthorizationService,
         RpcExceptionService,
-        UserService,
-        JwtTokenService,
-        PasswordUtilsService,
+        TokenService,
+        CookieService,
         {
           provide: JwtService,
           useValue: mockedJwtService,

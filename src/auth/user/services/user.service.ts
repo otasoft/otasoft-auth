@@ -36,7 +36,7 @@ import {
 } from '../queries/impl';
 import { AuthCredentialsDto } from '../../authentication/dto';
 import { PasswordUtilsService } from '../../../utils/password-utils';
-import { TokenService } from 'src/auth/authorization/services';
+import { TokenService } from '../../authorization/services';
 
 @Injectable()
 export class UserService {
