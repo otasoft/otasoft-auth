@@ -10,7 +10,11 @@ import { CommandHandlers } from './commands/handlers';
 import { UserModule } from '../user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserWriteRepository]), CqrsModule, UserModule],
+  imports: [
+    TypeOrmModule.forFeature([UserWriteRepository]),
+    CqrsModule,
+    UserModule,
+  ],
   controllers: [AuthorizationController],
   providers: [AuthorizationService, ConfigService, ...CommandHandlers],
 })

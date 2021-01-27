@@ -18,7 +18,9 @@ export class RemoveRefreshTokenHandler
 
   async execute(command: RemoveRefreshTokenCommand): Promise<void> {
     try {
-      this.userWriteRepository.update(command.userId, { hashedRefreshToken: null });
+      this.userWriteRepository.update(command.userId, {
+        hashedRefreshToken: null,
+      });
     } catch (error) {
       const errorObject = this.errorValidationService.validateDbError(error);
 

@@ -25,7 +25,9 @@ export class AuthorizationService {
   ): Promise<boolean> {
     const { jwt, id } = accessControlDto;
 
-    const jwtTokenPayload: IJwtPayload = await this.jwtTokenService.verifyToken(jwt);
+    const jwtTokenPayload: IJwtPayload = await this.jwtTokenService.verifyToken(
+      jwt,
+    );
 
     if (jwtTokenPayload.userId !== id)
       this.rpcExceptionService.throwForbidden('Forbidden resource');
