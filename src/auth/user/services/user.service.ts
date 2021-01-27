@@ -35,6 +35,8 @@ import {
   GetUserByIdQuery,
   GetUserIdQuery,
 } from '../queries/impl';
+import { AuthCredentialsDto } from '../../authentication/dto';
+import { PasswordUtilsService } from '../../../utils/password-utils';
 
 @Injectable()
 export class UserService {
@@ -43,6 +45,7 @@ export class UserService {
     private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly jwtTokenService: JwtTokenService,
+    private readonly passwordUtilsService: PasswordUtilsService,
   ) {}
 
   async getUserId(getUserIdDto: GetUserIdDto): Promise<AuthIdModel> {
@@ -61,6 +64,22 @@ export class UserService {
 
   async getUserByEmail(email: string): Promise<UserEntity> {
     return this.queryBus.execute(new GetUserByEmailQuery(email));
+  }
+
+  async getAuthenticatedUser(authCredentialsDto: AuthCredentialsDto) {
+    const user = await this.getUserByEmail(authCredentialsDto.email);
+
+    if (!user) this.rpcExceptionService.throwNotFound('User not found');
+
+    const isPasswordValidated = await this.passwordUtilsService.validatePassword(
+      authCredentialsDto.password,
+      user.password,
+    );
+
+    if (!isPasswordValidated)
+      this.rpcExceptionService.throwUnauthorised('Password do not match');
+
+    return user;
   }
 
   async changeUserPassword(

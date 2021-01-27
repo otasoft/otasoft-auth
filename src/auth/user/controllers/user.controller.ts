@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
+import { AuthCredentialsDto } from '../../authentication/dto';
 import { UserEntity } from '../../../db/entities';
 import {
   AuthConfirmationDto,
@@ -43,6 +44,14 @@ export class UserController {
     getRefreshUserIdDto: GetRefreshUserDto,
   ): Promise<UserEntity> {
     return this.userService.getUserIfRefreshTokenMatches(getRefreshUserIdDto);
+  }
+
+  @UseInterceptors(ClassSerializerInterceptor)
+  @MessagePattern({ role: 'user', cmd: 'getAuthenticatedUser' })
+  getAuthenticatedUser(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<UserEntity> {
+    return this.userService.getAuthenticatedUser(authCredentialsDto);
   }
 
   @MessagePattern({ role: 'user', cmd: 'changePassword' })
