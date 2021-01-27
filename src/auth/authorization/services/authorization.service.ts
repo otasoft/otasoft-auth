@@ -19,7 +19,7 @@ export class AuthorizationService {
     private readonly jwtTokenService: JwtTokenService,
     private readonly userService: UserService,
     private readonly passwordUtilsService: PasswordUtilsService,
-    private readonly cookieService: CookieService
+    private readonly cookieService: CookieService,
   ) {}
 
   async checkAccessControl(

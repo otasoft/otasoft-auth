@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserWriteRepository } from '../../db/repositories';
 import { AuthorizationController } from './controllers/authorization.controller';
-import { AuthorizationService } from './services/authorization.service';
+import { AuthorizationService, TokenService } from './services';
 import { CommandHandlers } from './commands/handlers';
 import { UserModule } from '../user/user.module';
 import { CookieService } from '../authentication/services';
@@ -17,6 +17,12 @@ import { CookieService } from '../authentication/services';
     UserModule,
   ],
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, CookieService, ConfigService, ...CommandHandlers],
+  providers: [
+    AuthorizationService,
+    CookieService,
+    TokenService,
+    ConfigService,
+    ...CommandHandlers,
+  ],
 })
 export class AuthorizationModule {}
