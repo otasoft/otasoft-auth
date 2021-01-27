@@ -4,22 +4,22 @@ import { CommandBus } from '@nestjs/cqrs';
 import { AccessControlDto } from '../dto';
 import { IJwtPayload } from '../../passport-jwt/interfaces';
 import { RpcExceptionService } from '../../../utils/exception-handling';
-import { JwtTokenService } from '../../passport-jwt/services';
 import { SetRefreshTokenCommand } from '../commands/impl';
 import { AuthCredentialsDto } from '../../authentication/dto';
 import { UserService } from '../../user/services/user.service';
 import { PasswordUtilsService } from '../../../utils/password-utils';
 import { CookieService } from '../../authentication/services';
+import { TokenService } from './token.service';
 
 @Injectable()
 export class AuthorizationService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
-    private readonly jwtTokenService: JwtTokenService,
     private readonly userService: UserService,
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly cookieService: CookieService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async checkAccessControl(
@@ -27,7 +27,7 @@ export class AuthorizationService {
   ): Promise<boolean> {
     const { jwt, id } = accessControlDto;
 
-    const jwtTokenPayload: IJwtPayload = await this.jwtTokenService.verifyToken(
+    const jwtTokenPayload: IJwtPayload = await this.tokenService.verifyToken(
       jwt,
     );
 

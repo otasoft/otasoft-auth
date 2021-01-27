@@ -7,10 +7,10 @@ import { AuthenticationController } from './controllers/authentication.controlle
 import { AuthenticationService, CookieService } from './services';
 import { UserWriteRepository } from '../../db/repositories';
 import { CommandHandlers } from './commands/handlers';
-import { AuthorizationService } from '../authorization/services/authorization.service';
 import { UserService } from '../user/services/user.service';
 import { PassportJwtModule } from '../passport-jwt/passport-jwt.module';
 import { UtilsModule } from '../../utils/utils.module';
+import { AuthorizationModule } from '../authorization/authorization.module';
 
 @Module({
   imports: [
@@ -18,13 +18,13 @@ import { UtilsModule } from '../../utils/utils.module';
     CqrsModule,
     PassportJwtModule,
     UtilsModule,
+    AuthorizationModule,
   ],
   controllers: [AuthenticationController],
   providers: [
     ConfigService,
     AuthenticationService,
     CookieService,
-    AuthorizationService,
     UserService,
     ...CommandHandlers,
   ],

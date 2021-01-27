@@ -7,14 +7,13 @@ import { UserWriteRepository } from '../../db/repositories';
 import { AuthorizationController } from './controllers/authorization.controller';
 import { AuthorizationService, TokenService } from './services';
 import { CommandHandlers } from './commands/handlers';
-import { UserModule } from '../user/user.module';
 import { CookieService } from '../authentication/services';
+import { UserService } from '../user/services/user.service';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserWriteRepository]),
     CqrsModule,
-    UserModule,
   ],
   controllers: [AuthorizationController],
   providers: [
@@ -22,7 +21,9 @@ import { CookieService } from '../authentication/services';
     CookieService,
     TokenService,
     ConfigService,
+    UserService,
     ...CommandHandlers,
   ],
+  exports: [TokenService, AuthorizationService]
 })
 export class AuthorizationModule {}
