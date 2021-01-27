@@ -112,7 +112,7 @@ export class UserService {
   async setNewPassword(
     setNewPasswordDto: SetNewPasswordDto,
   ): Promise<AuthEmailModel> {
-    const payload: IJwtPayload = this.jwtTokenService.verifyToken(
+    const payload: IJwtPayload = await this.jwtTokenService.verifyToken(
       setNewPasswordDto.forgotPasswordToken,
     );
 
