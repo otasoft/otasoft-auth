@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { JwtTokenService } from '../../../auth/passport-jwt/services';
 import { IJwtPayload } from '../../../auth/passport-jwt/interfaces';
 import { UserEntity } from '../../../db/entities';
 import { RpcExceptionService } from '../../../utils/exception-handling';
@@ -37,6 +36,7 @@ import {
 } from '../queries/impl';
 import { AuthCredentialsDto } from '../../authentication/dto';
 import { PasswordUtilsService } from '../../../utils/password-utils';
+import { TokenService } from 'src/auth/authorization/services';
 
 @Injectable()
 export class UserService {
@@ -44,7 +44,7 @@ export class UserService {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     private readonly rpcExceptionService: RpcExceptionService,
-    private readonly jwtTokenService: JwtTokenService,
+    private readonly tokenService: TokenService,
     private readonly passwordUtilsService: PasswordUtilsService,
   ) {}
 
@@ -131,7 +131,7 @@ export class UserService {
   async setNewPassword(
     setNewPasswordDto: SetNewPasswordDto,
   ): Promise<AuthEmailModel> {
-    const payload: IJwtPayload = await this.jwtTokenService.verifyToken(
+    const payload: IJwtPayload = await this.tokenService.verifyToken(
       setNewPasswordDto.forgotPasswordToken,
     );
 
