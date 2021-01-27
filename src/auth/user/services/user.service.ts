@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
-import { IJwtPayload } from '../../../auth/passport-jwt/interfaces';
+import { IJwtPayload } from '../../passport-jwt/interfaces';
 import { UserEntity } from '../../../db/entities';
 import { RpcExceptionService } from '../../../utils/exception-handling';
 import {

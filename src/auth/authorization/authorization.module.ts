@@ -11,10 +11,7 @@ import { CookieService } from '../authentication/services';
 import { UserService } from '../user/services/user.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([UserWriteRepository]),
-    CqrsModule,
-  ],
+  imports: [TypeOrmModule.forFeature([UserWriteRepository]), CqrsModule],
   controllers: [AuthorizationController],
   providers: [
     AuthorizationService,
@@ -24,6 +21,6 @@ import { UserService } from '../user/services/user.service';
     UserService,
     ...CommandHandlers,
   ],
-  exports: [TokenService, AuthorizationService]
+  exports: [TokenService, AuthorizationService],
 })
 export class AuthorizationModule {}

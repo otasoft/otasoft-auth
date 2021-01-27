@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { JwtTokenService } from '../../../passport-jwt/services';
 import { UserWriteRepository } from '../../../../db/repositories';
 import { GenerateForgotPasswordTokenCommand } from '../impl';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
@@ -13,7 +12,6 @@ export class GenerateForgotPasswordTokenHandler
   constructor(
     @InjectRepository(UserWriteRepository)
     private readonly userWriteRepository: UserWriteRepository,
-    private readonly jwtTokenService: JwtTokenService,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly tokenService: TokenService,
   ) {}
