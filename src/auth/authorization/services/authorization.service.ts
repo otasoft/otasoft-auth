@@ -9,6 +9,7 @@ import { SetRefreshTokenCommand } from '../commands/impl';
 import { AuthCredentialsDto } from '../../authentication/dto';
 import { UserService } from '../../user/services/user.service';
 import { PasswordUtilsService } from '../../../utils/password-utils';
+import { CookieService } from '../../authentication/services';
 
 @Injectable()
 export class AuthorizationService {
@@ -18,6 +19,7 @@ export class AuthorizationService {
     private readonly jwtTokenService: JwtTokenService,
     private readonly userService: UserService,
     private readonly passwordUtilsService: PasswordUtilsService,
+    private readonly cookieService: CookieService
   ) {}
 
   async checkAccessControl(
@@ -42,7 +44,7 @@ export class AuthorizationService {
   }
 
   getCookieWithJwtAccessToken(id: number): string {
-    return this.jwtTokenService.getCookieWithJwtAccessToken(id);
+    return this.cookieService.getCookieWithJwtAccessToken(id);
   }
 
   async getAuthenticatedUser(authCredentialsDto: AuthCredentialsDto) {

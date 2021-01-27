@@ -8,6 +8,7 @@ import { AuthorizationController } from './controllers/authorization.controller'
 import { AuthorizationService } from './services/authorization.service';
 import { CommandHandlers } from './commands/handlers';
 import { UserModule } from '../user/user.module';
+import { CookieService } from '../authentication/services';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { UserModule } from '../user/user.module';
     UserModule,
   ],
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, ConfigService, ...CommandHandlers],
+  providers: [AuthorizationService, CookieService, ConfigService, ...CommandHandlers],
 })
 export class AuthorizationModule {}
