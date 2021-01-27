@@ -8,7 +8,6 @@ import { AuthenticationService, CookieService } from './services';
 import { UserWriteRepository } from '../../db/repositories';
 import { CommandHandlers } from './commands/handlers';
 import { UserService } from '../user/services/user.service';
-import { PassportJwtModule } from '../passport-jwt/passport-jwt.module';
 import { UtilsModule } from '../../utils/utils.module';
 import { AuthorizationModule } from '../authorization/authorization.module';
 
@@ -16,7 +15,6 @@ import { AuthorizationModule } from '../authorization/authorization.module';
   imports: [
     TypeOrmModule.forFeature([UserWriteRepository]),
     CqrsModule,
-    PassportJwtModule,
     UtilsModule,
     AuthorizationModule,
   ],
