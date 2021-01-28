@@ -6,9 +6,9 @@ import { SignInCommand } from '../impl';
 import { UserWriteRepository } from '../../../../db/repositories';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
-import { JwtTokenService } from '../../../passport-jwt/services';
 import { UserWithCookiesModel } from '../../models';
 import { AuthorizationService } from '../../../../auth/authorization/services/authorization.service';
+import { CookieService } from '../../services';
 
 @CommandHandler(SignInCommand)
 export class SignInHandler implements ICommandHandler<SignInCommand> {
@@ -17,8 +17,8 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
     private readonly userWriteRepository: UserWriteRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
-    private readonly jwtTokenService: JwtTokenService,
     private readonly authorizationService: AuthorizationService,
+    private readonly cookieService: CookieService,
   ) {}
 
   async execute(command: SignInCommand): Promise<UserWithCookiesModel> {
@@ -39,10 +39,10 @@ export class SignInHandler implements ICommandHandler<SignInCommand> {
         user.jwt_payload = jwtPayload;
         user.save();
 
-        const accessTokenCookie = this.jwtTokenService.getCookieWithJwtAccessToken(
+        const accessTokenCookie = this.cookieService.getCookieWithJwtAccessToken(
           user.id,
         );
-        const refreshTokenCookie = this.jwtTokenService.getCookieWithJwtRefreshToken(
+        const refreshTokenCookie = this.cookieService.getCookieWithJwtRefreshToken(
           user.id,
         );
 

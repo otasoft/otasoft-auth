@@ -9,15 +9,15 @@ import { UserReadRepository, UserWriteRepository } from '../../db/repositories';
 import { PasswordUtilsService } from '../../utils/password-utils';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
-import { PassportJwtModule } from '../passport-jwt/passport-jwt.module';
 import { UtilsModule } from '../../utils/utils.module';
+import { AuthorizationModule } from '../authorization/authorization.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserReadRepository, UserWriteRepository]),
     CqrsModule,
-    PassportJwtModule,
     UtilsModule,
+    AuthorizationModule,
   ],
   controllers: [UserController],
   providers: [

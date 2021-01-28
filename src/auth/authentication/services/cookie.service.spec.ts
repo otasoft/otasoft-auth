@@ -1,23 +1,17 @@
 import { ConfigService } from '@nestjs/config';
-import { CqrsModule } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { JwtTokenService } from '../../../auth/passport-jwt/services';
-import { RpcExceptionService } from '../../../utils/exception-handling';
 import { mockedConfigService, mockedJwtService } from '../../../utils/mocks';
-import { UserService } from './user.service';
+import { CookieService } from './cookie.service';
 
-describe('UserService', () => {
-  let service: UserService;
+describe('CookieService', () => {
+  let service: CookieService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CqrsModule],
       providers: [
-        UserService,
-        JwtTokenService,
-        RpcExceptionService,
+        CookieService,
         {
           provide: JwtService,
           useValue: mockedJwtService,
@@ -29,7 +23,7 @@ describe('UserService', () => {
       ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = module.get<CookieService>(CookieService);
   });
 
   it('should be defined', () => {

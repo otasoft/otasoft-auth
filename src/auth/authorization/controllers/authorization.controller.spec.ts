@@ -5,11 +5,10 @@ import { ConfigService } from '@nestjs/config';
 
 import { AuthorizationController } from './authorization.controller';
 import { AuthorizationService } from '../services/authorization.service';
-import { JwtTokenService } from '../../passport-jwt/services';
-import { UserService } from '../../user/services/user.service';
 import { RpcExceptionService } from '../../../utils/exception-handling';
-import { PasswordUtilsService } from '../../../utils/password-utils';
 import { mockedConfigService, mockedJwtService } from '../../../utils/mocks';
+import { TokenService } from '../services';
+import { CookieService } from '../../authentication/services';
 
 describe('AuthorizationController', () => {
   let controller: AuthorizationController;
@@ -21,9 +20,8 @@ describe('AuthorizationController', () => {
       providers: [
         AuthorizationService,
         RpcExceptionService,
-        UserService,
-        JwtTokenService,
-        PasswordUtilsService,
+        TokenService,
+        CookieService,
         {
           provide: JwtService,
           useValue: mockedJwtService,

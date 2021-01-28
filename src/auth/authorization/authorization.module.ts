@@ -5,13 +5,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserWriteRepository } from '../../db/repositories';
 import { AuthorizationController } from './controllers/authorization.controller';
-import { AuthorizationService } from './services/authorization.service';
+import { AuthorizationService, TokenService } from './services';
 import { CommandHandlers } from './commands/handlers';
-import { UserModule } from '../user/user.module';
+import { CookieService } from '../authentication/services';
+import { UserService } from '../user/services/user.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserWriteRepository]), CqrsModule, UserModule],
+  imports: [TypeOrmModule.forFeature([UserWriteRepository]), CqrsModule],
   controllers: [AuthorizationController],
-  providers: [AuthorizationService, ConfigService, ...CommandHandlers],
+  providers: [
+    AuthorizationService,
+    CookieService,
+    TokenService,
+    ConfigService,
+    UserService,
+    ...CommandHandlers,
+  ],
+  exports: [TokenService, AuthorizationService],
 })
 export class AuthorizationModule {}

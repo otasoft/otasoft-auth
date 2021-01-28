@@ -1,12 +1,5 @@
-import {
-  ClassSerializerInterceptor,
-  Controller,
-  UseInterceptors,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-
-import { UserEntity } from '../../../db/entities';
-import { AuthCredentialsDto } from '../../authentication/dto';
 import { AccessControlDto } from '../dto';
 import { AuthorizationService } from '../services/authorization.service';
 
@@ -24,13 +17,5 @@ export class AuthorizationController {
   @MessagePattern({ role: 'authorization', cmd: 'getCookieWithJwtAccessToken' })
   getCookieWithJwtAccessToken(id: number): string {
     return this.authorizationService.getCookieWithJwtAccessToken(id);
-  }
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @MessagePattern({ role: 'authorization', cmd: 'getAuthenticatedUser' })
-  getAuthenticatedUser(
-    authCredentialsDto: AuthCredentialsDto,
-  ): Promise<UserEntity> {
-    return this.authorizationService.getAuthenticatedUser(authCredentialsDto);
   }
 }

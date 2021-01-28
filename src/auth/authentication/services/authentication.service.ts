@@ -4,15 +4,15 @@ import { CommandBus } from '@nestjs/cqrs';
 import { AuthCredentialsDto } from '../dto';
 import { SignUpCommand, SignInCommand } from '../commands/impl';
 import { UserService } from '../../user/services/user.service';
-import { JwtTokenService } from '../../passport-jwt/services';
 import { UserWithCookiesModel } from '../models';
+import { CookieService } from './cookie.service';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
     private readonly commandBus: CommandBus,
     private readonly userService: UserService,
-    private readonly jwtTokenService: JwtTokenService,
+    private readonly cookieService: CookieService,
   ) {}
 
   async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
@@ -28,6 +28,6 @@ export class AuthenticationService {
   async logout(userId: number): Promise<string[]> {
     await this.userService.removeRefreshToken(userId);
 
-    return this.jwtTokenService.getCookiesForLogOut();
+    return this.cookieService.getCookiesForLogOut();
   }
 }

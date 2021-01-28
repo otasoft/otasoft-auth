@@ -7,7 +7,7 @@ import { SignUpCommand } from '../impl';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { ErrorValidationService } from '../../../../utils/error-validation';
-import { JwtTokenService } from '../../../passport-jwt/services';
+import { TokenService } from '../../../authorization/services';
 
 @CommandHandler(SignUpCommand)
 export class SignUpHandler implements ICommandHandler<SignUpCommand> {
@@ -17,7 +17,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
     private readonly passwordUtilsService: PasswordUtilsService,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly errorValidationService: ErrorValidationService,
-    private readonly jwtTokenService: JwtTokenService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async execute(command: SignUpCommand) {
@@ -33,7 +33,7 @@ export class SignUpHandler implements ICommandHandler<SignUpCommand> {
 
     try {
       await user.save();
-      const token = this.jwtTokenService.signWithSecret(
+      const token = this.tokenService.signWithSecret(
         { userId: user.id, userEmail: user.email },
         { expiresIn: '2d' },
       );

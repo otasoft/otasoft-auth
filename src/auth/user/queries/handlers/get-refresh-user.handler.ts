@@ -18,7 +18,9 @@ export class GetRefreshUserHandler
   ) {}
 
   async execute(query: GetRefreshUserQuery): Promise<UserEntity> {
-    const user = await this.userReadRepository.findOne(query.getRefreshUserDto.id);
+    const user = await this.userReadRepository.findOne(
+      query.getRefreshUserDto.id,
+    );
 
     const isRefreshTokenMatching = await this.passwordUtilsService.compareContent(
       query.getRefreshUserDto.refreshToken,
