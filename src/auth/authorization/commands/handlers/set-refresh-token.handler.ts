@@ -2,15 +2,15 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { PasswordUtilsService } from '../../../../utils/password-utils';
-import { UserRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { SetRefreshTokenCommand } from '../impl';
 
 @CommandHandler(SetRefreshTokenCommand)
 export class SetRefreshTokenHandler
   implements ICommandHandler<SetRefreshTokenCommand> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserWriteRepository)
+    private readonly userWriteRepository: UserWriteRepository,
     private readonly passwordUtilsService: PasswordUtilsService,
   ) {}
 
@@ -20,7 +20,7 @@ export class SetRefreshTokenHandler
       10,
     );
 
-    await this.userRepository.update(command.userId, {
+    await this.userWriteRepository.update(command.userId, {
       hashedRefreshToken,
     });
   }

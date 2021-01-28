@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { JwtTokenService } from '../../../passport-jwt/services';
-import { UserRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { GenerateForgotPasswordTokenCommand } from '../impl/generate-forgot-password-token.command';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 
@@ -10,8 +10,8 @@ import { RpcExceptionService } from '../../../../utils/exception-handling';
 export class GenerateForgotPasswordTokenHandler
   implements ICommandHandler<GenerateForgotPasswordTokenCommand> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserWriteRepository)
+    private readonly userWriteRepository: UserWriteRepository,
     private readonly jwtTokenService: JwtTokenService,
     private readonly rpcExceptionService: RpcExceptionService,
   ) {}
@@ -19,7 +19,7 @@ export class GenerateForgotPasswordTokenHandler
   async execute(command: GenerateForgotPasswordTokenCommand) {
     const { userId } = command;
 
-    const user = await this.userRepository.findOne({ id: userId });
+    const user = await this.userWriteRepository.findOne({ id: userId });
 
     try {
       const forgotPasswordToken = this.jwtTokenService.signWithSecret(command, {
@@ -27,7 +27,7 @@ export class GenerateForgotPasswordTokenHandler
       });
 
       user.forgotPasswordToken = forgotPasswordToken;
-      await this.userRepository.save(user);
+      await this.userWriteRepository.save(user);
 
       return forgotPasswordToken;
     } catch (error) {

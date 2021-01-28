@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as jwt from 'jsonwebtoken';
 
 import { IConfirmedAccountObject } from '../../interfaces';
-import { UserRepository } from '../../../../db/repositories';
+import { UserReadRepository } from '../../../../db/repositories';
 import { GetConfirmedUserQuery } from '../impl';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 
@@ -11,8 +11,8 @@ import { RpcExceptionService } from '../../../../utils/exception-handling';
 export class GetConfirmedUserHandler
   implements IQueryHandler<GetConfirmedUserQuery> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserReadRepository)
+    private readonly userReadRepository: UserReadRepository,
     private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
@@ -22,7 +22,7 @@ export class GetConfirmedUserHandler
     const { token } = query.authConfirmationDto;
     const dataObjectFromToken = jwt.verify(token, process.env.EMAIL_SECRET);
     const { id, email } = <any>dataObjectFromToken;
-    const user = await this.userRepository.findOne({
+    const user = await this.userReadRepository.findOne({
       where: { id: id, email: email },
     });
 

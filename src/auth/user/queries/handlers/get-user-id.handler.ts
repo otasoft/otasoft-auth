@@ -2,19 +2,19 @@ import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { GetUserIdQuery } from '../impl';
-import { UserRepository } from '../../../../db/repositories';
+import { UserReadRepository } from '../../../../db/repositories';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 
 @QueryHandler(GetUserIdQuery)
 export class GetUserIdHandler implements IQueryHandler<GetUserIdQuery> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserReadRepository)
+    private readonly userReadRepository: UserReadRepository,
     private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
   async execute(query: GetUserIdQuery) {
-    const user = await this.userRepository.findOne({
+    const user = await this.userReadRepository.findOne({
       where: { jwt_payload: query.getUserIdDto.payloadUserId },
     });
 

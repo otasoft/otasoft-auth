@@ -2,7 +2,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { RpcExceptionService } from '../../../../utils/exception-handling';
-import { UserRepository } from '../../../../db/repositories';
+import { UserWriteRepository } from '../../../../db/repositories';
 import { AuthEmailModel } from '../../models';
 import { SetNewPasswordCommand } from '../impl';
 import { PasswordUtilsService } from '../../../../utils/password-utils';
@@ -11,14 +11,14 @@ import { PasswordUtilsService } from '../../../../utils/password-utils';
 export class SetNewPasswordHandler
   implements ICommandHandler<SetNewPasswordCommand> {
   constructor(
-    @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserWriteRepository)
+    private readonly userWriteRepository: UserWriteRepository,
     private readonly rpcExceptionService: RpcExceptionService,
     private readonly passwordUtilsService: PasswordUtilsService,
   ) {}
 
   async execute(command: SetNewPasswordCommand): Promise<AuthEmailModel> {
-    const user = await this.userRepository.findOne(command.userId);
+    const user = await this.userWriteRepository.findOne(command.userId);
 
     if (!user)
       this.rpcExceptionService.throwNotFound(
@@ -34,7 +34,7 @@ export class SetNewPasswordHandler
       // remove the forgotPasswordToken so that it cannot be used again
       user.forgotPasswordToken = '';
 
-      await this.userRepository.save(user);
+      await this.userWriteRepository.save(user);
 
       return { user_email: user.email };
     } catch (error) {
