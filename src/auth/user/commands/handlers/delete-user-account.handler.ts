@@ -1,29 +1,49 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { InjectRepository } from '@nestjs/typeorm';
+import {CommandHandler, ICommandHandler} from '@nestjs/cqrs';
+import {InjectRepository} from '@nestjs/typeorm';
+import {LessThanOrEqual} from "typeorm";
+import {Cron, CronExpression} from '@nestjs/schedule';
 
-import { RpcExceptionService } from '../../../../utils/exception-handling';
-import { UserWriteRepository } from '../../../../db/repositories';
-import { DeleteUserAccountCommand } from '../impl';
+import {RpcExceptionService} from '../../../../utils/exception-handling';
+import {UserWriteRepository} from '../../../../db/repositories';
+import {DeleteUserAccountCommand} from '../impl';
+
+
 
 @CommandHandler(DeleteUserAccountCommand)
 export class DeleteUserAccountHandler
-  implements ICommandHandler<DeleteUserAccountCommand> {
-  constructor(
-    @InjectRepository(UserWriteRepository)
-    private readonly userWriteRepository: UserWriteRepository,
-    private readonly rpcExceptionService: RpcExceptionService,
-  ) {}
-
-  async execute(command: DeleteUserAccountCommand) {
-    // TODO Check if a deleted user is currently logged user. Currently any authenticated user can delete any user profile.
-    // TODO instead of imediately deleting the user account, add a column 'mark_for_deletion' with a type of boolean, and a cron job, that will delete the user account after certain amount of time.
-    try {
-      await this.userWriteRepository.delete(command.id);
-      return {
-        response: `User with id #${command.id} successfuly deleted`,
-      };
-    } catch (error) {
-      this.rpcExceptionService.throwCatchedException(error);
+    implements ICommandHandler<DeleteUserAccountCommand> {
+    constructor(
+        @InjectRepository(UserWriteRepository)
+        private readonly userWriteRepository: UserWriteRepository,
+        private readonly rpcExceptionService: RpcExceptionService,
+    ) {
     }
-  }
+
+    dateFormatter = (delay = 0) => {
+        const date = new Date();
+        date.setDate(date.getDate() - delay);
+        return date.getUTCFullYear() + "-" +("0" + (date.getUTCMonth()+1)).slice(-2) + "-" +("0" + date.getUTCDate()).slice(-2)
+    }
+
+    async execute(command: DeleteUserAccountCommand) {
+        const termination_date = this.dateFormatter(30)
+        try {
+            await this.userWriteRepository.update(command.id, {termination_date})
+            return {
+                response: `User with id #${command.id} has been marked to delete`,
+            };
+        } catch (error) {
+            this.rpcExceptionService.throwCatchedException(error);
+        }
+    }
+
+    @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+    async deleteMarkedUsers() {
+        const currentDate = this.dateFormatter()
+        const terminationUsers = await this.userWriteRepository.find({termination_date: LessThanOrEqual(currentDate)})
+
+        if (terminationUsers && terminationUsers.length > 0) {
+            terminationUsers.forEach(({id}) => this.userWriteRepository.delete(id))
+        }
+    }
 }
