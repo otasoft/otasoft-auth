@@ -66,6 +66,11 @@ export class UserController {
     return this.userService.deleteUserAccount(id);
   }
 
+  @MessagePattern({ role: 'user', cmd: 'revokeAccount' })
+  async revokeUserAccount(id: number): Promise<StringResponse> {
+    return this.userService.revokeUserAccount(id);
+  }
+
   @MessagePattern({ role: 'user', cmd: 'confirmAccount' })
   async confirmAccountCreation(
     authConfirmationDto: AuthConfirmationDto,

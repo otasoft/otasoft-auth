@@ -14,8 +14,7 @@ export class DeleteUserAccountHandler
     @InjectRepository(UserWriteRepository)
     private readonly userWriteRepository: UserWriteRepository,
     private readonly rpcExceptionService: RpcExceptionService,
-  ) {
-  }
+  ) {}
 
   currentDate = Math.round(Date.now() / 1000);
 
@@ -35,7 +34,9 @@ export class DeleteUserAccountHandler
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async deleteMarkedUsers() {
     const termination_date = this.currentDate;
-    const terminationUsers = await this.userWriteRepository.find({ termination_date: LessThanOrEqual(termination_date) });
+    const terminationUsers = await this.userWriteRepository.find({
+      termination_date: LessThanOrEqual(termination_date),
+    });
 
     if (terminationUsers && terminationUsers.length > 0) {
       terminationUsers.forEach(({ id }) => this.userWriteRepository.delete(id));
