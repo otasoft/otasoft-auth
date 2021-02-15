@@ -36,7 +36,7 @@ export class UserEntity extends BaseEntity {
   @Exclude()
   forgotPasswordToken?: string;
 
-  @Column({ type: 'date' })
+  @Column({ nullable: true })
   @Exclude()
-  termination_date: Date;
+  termination_date?: number;
 }
