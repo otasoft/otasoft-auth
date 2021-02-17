@@ -6,6 +6,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { UserWriteRepository } from '../../../../db/repositories';
 import { DeleteUserAccountCommand } from '../impl';
+import { DelayExpression } from '../../../../utils/delay-expression';
 
 @CommandHandler(DeleteUserAccountCommand)
 export class DeleteUserAccountHandler
@@ -19,8 +20,7 @@ export class DeleteUserAccountHandler
   currentDate = Math.round(Date.now() / 1000);
 
   async execute(command: DeleteUserAccountCommand) {
-    const delay30Days = 2592000;
-    const termination_date = this.currentDate + delay30Days;
+    const termination_date = this.currentDate + DelayExpression.DELAY_30_DAYS;
     try {
       await this.userWriteRepository.update(command.id, { termination_date });
       return {
@@ -33,9 +33,8 @@ export class DeleteUserAccountHandler
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async deleteMarkedUsers() {
-    const termination_date = this.currentDate;
     const terminationUsers = await this.userWriteRepository.find({
-      termination_date: LessThanOrEqual(termination_date),
+      termination_date: LessThanOrEqual(this.currentDate),
     });
 
     if (terminationUsers && terminationUsers.length > 0) {
