@@ -3,6 +3,7 @@ import { ChangeUserPasswordHandler } from './change-user-password.handler';
 import { DeleteUserAccountHandler } from './delete-user-account.handler';
 import { RemoveRefreshTokenHandler } from './remove-refresh-token.handler';
 import { GenerateForgotPasswordTokenHandler } from './generate-forgot-password-token.handler';
+import { RevokeUserAccountHandler } from './revoke-user-account.handler';
 import { SetNewPasswordHandler } from './set-new-password.handler';
 
 export const CommandHandlers = [
@@ -11,5 +12,6 @@ export const CommandHandlers = [
   DeleteUserAccountHandler,
   RemoveRefreshTokenHandler,
   GenerateForgotPasswordTokenHandler,
+  RevokeUserAccountHandler,
   SetNewPasswordHandler,
 ];

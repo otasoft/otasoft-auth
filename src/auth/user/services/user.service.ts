@@ -9,6 +9,7 @@ import {
   ConfirmAccountCreationCommand,
   DeleteUserAccountCommand,
   RemoveRefreshTokenCommand,
+  RevokeUserAccountCommand,
   SetNewPasswordCommand,
 } from '../commands/impl';
 import { GenerateForgotPasswordTokenCommand } from '../commands/impl/generate-forgot-password-token.command';
@@ -126,6 +127,10 @@ export class UserService {
     );
 
     return token;
+  }
+
+  async revokeUserAccount(id: number): Promise<StringResponse> {
+    return this.commandBus.execute(new RevokeUserAccountCommand(id));
   }
 
   async setNewPassword(

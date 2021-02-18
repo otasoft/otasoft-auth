@@ -1,9 +1,12 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LessThanOrEqual } from 'typeorm';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { RpcExceptionService } from '../../../../utils/exception-handling';
 import { UserWriteRepository } from '../../../../db/repositories';
 import { DeleteUserAccountCommand } from '../impl';
+import { DelayExpression } from '../../../../utils/delay-expression';
 
 @CommandHandler(DeleteUserAccountCommand)
 export class DeleteUserAccountHandler
@@ -14,16 +17,28 @@ export class DeleteUserAccountHandler
     private readonly rpcExceptionService: RpcExceptionService,
   ) {}
 
+  currentDate = Math.round(Date.now() / 1000);
+
   async execute(command: DeleteUserAccountCommand) {
-    // TODO Check if a deleted user is currently logged user. Currently any authenticated user can delete any user profile.
-    // TODO instead of imediately deleting the user account, add a column 'mark_for_deletion' with a type of boolean, and a cron job, that will delete the user account after certain amount of time.
+    const termination_date = this.currentDate + DelayExpression.DELAY_30_DAYS;
     try {
-      await this.userWriteRepository.delete(command.id);
+      await this.userWriteRepository.update(command.id, { termination_date });
       return {
-        response: `User with id #${command.id} successfuly deleted`,
+        response: `User with id #${command.id} has been marked to delete`,
       };
     } catch (error) {
       this.rpcExceptionService.throwCatchedException(error);
+    }
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  async deleteMarkedUsers() {
+    const terminationUsers = await this.userWriteRepository.find({
+      termination_date: LessThanOrEqual(this.currentDate),
+    });
+
+    if (terminationUsers && terminationUsers.length > 0) {
+      terminationUsers.forEach(({ id }) => this.userWriteRepository.delete(id));
     }
   }
 }
