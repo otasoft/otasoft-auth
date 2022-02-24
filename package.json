@@ -33,7 +33,7 @@
     "@nestjs/terminus": "^7.1.0",
     "@nestjs/typeorm": "^7.1.5",
     "amqp-connection-manager": "^3.2.1",
-    "amqplib": "^0.6.0",
+    "amqplib": "^0.7.1",
     "bcrypt": "^5.0.0",
     "class-transformer": "^0.3.2",
     "class-validator": "^0.13.0",
